@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Topbar from "@/components/Topbar/Topbar";
 
 export const metadata: Metadata = {
   title: "Gold Chain & Jewelry Wholesale Catalog",
-  description: "B2B Wholesale Catalog for Chains, Jewelry and Pipes",
+  description: "Wholesale catalog for gold chains, bracelets, rings, necklaces and more.",
 };
 
 export default function RootLayout({
@@ -14,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Topbar />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

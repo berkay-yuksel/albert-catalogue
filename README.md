@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+https://albert-catalogue.vercel.app/
 
-## Getting Started
+# Albert Catalog — Next.js Dönüşümü
 
-First, run the development server:
+## Şu ana kadar tamamlanan: Adım 1 — Proje iskeleti + Veri Katmanı
+
+- `lib/types.ts` — Product, FacetConfig vb. tip tanımları
+- `lib/constants.ts` — orijinal HTML'deki tüm sabit diziler (KARATS, COLORS, CHAIN_STYLES...)
+- `lib/products.ts` — ürün üretim mantığı, fiyat hesaplama, kategori bazlı facet config'leri
+
+Bu üç dosya, orijinal `<script>` içindeki DATA / PRICING / PER-CATEGORY FILTER CONFIG
+bölümlerinin birebir TypeScript karşılığıdır. Mantıkta hiçbir değişiklik yapılmadı,
+sadece `var`/`const` global'ler modül exportlarına dönüştürüldü.
+
+## Sıradaki adımlar
+
+**Adım 2 — UI Component'leri**
+- `components/TopBar.tsx`, `CategoryTabs.tsx`, `Sidebar.tsx` (facet UI)
+- `components/ProductGrid.tsx`, `ProductCard.tsx`, `ProductListTable.tsx`
+- `components/ProductModal.tsx`, `OrderPanel.tsx`
+- `lib/svg.ts` — swatchSVG üretim fonksiyonu (React'e uyarlanmış hali)
+
+**Adım 3 — Stil taşıma**
+- Mevcut `<style>` bloğu → `app/globals.css` (class isimleri korunacak, sıfır CSS yeniden yazımı)
+
+**Adım 4 — Client state**
+- search / filtre / sıralama / grid-list toggle → React Context + useState/useReducer
+- Sipariş sepeti → Context, sayfa yenilendiğinde kaybolmaması için opsiyonel olarak
+  Next.js'te cookie/DB tabanlı kalıcılık (localStorage artifact'larda çalışmıyor
+  ama gerçek bir Next.js projesinde sorun değil)
+
+**Adım 5 — Database bağlama**
+- Prisma + PostgreSQL (veya geliştirme için SQLite) kurulumu
+- `Product` tablosu, mevcut `PRODUCTS` dizisi seed script'i ile DB'ye yüklenir
+- `lib/products.ts`'teki statik array yerine `app/page.tsx` içinde
+  `await prisma.product.findMany()` server component sorgusu
+- Sipariş listesi de DB'ye taşınabilir (Order / OrderItem tabloları) —
+  şu anki mailto ile gönderim yerine gerçek bir sipariş kaydı oluşturulur
+
+## Kurulum (bu iskeleti indirdikten sonra)
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Şu an sadece veri katmanı olduğu için `app/page.tsx` henüz yok — Adım 2'de eklenecek.

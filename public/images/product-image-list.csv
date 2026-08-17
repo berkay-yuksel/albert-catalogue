@@ -1,0 +1,82 @@
+id,category,name,expected_filename
+1,Chain,D/C Forzentina,1.jpg
+2,Chain,Hollow Forzentina Brill,2.jpg
+3,Chain,Canal-Cut Forzentina,3.jpg
+4,Chain,Square Forzentina,4.jpg
+5,Chain,Snake Forzentina,5.jpg
+6,Chain,D/C Cable,6.jpg
+7,Chain,D/C Square Cable,7.jpg
+8,Chain,D/C Box Chain,8.jpg
+9,Chain,Paperclip,9.jpg
+10,Chain,D/C Hollow Paperclip,10.jpg
+11,Chain,Paperclip Brill,11.jpg
+12,Chain,Press Paperclip,12.jpg
+13,Chain,D/C Singapore,13.jpg
+14,Chain,Sogliola Singapore,14.jpg
+15,Chain,D/C Square Singapore,15.jpg
+16,Chain,Hollow Sogliola Singapore,16.jpg
+17,Chain,D/C Curb,17.jpg
+18,Chain,Hollow Cuban Curb,18.jpg
+19,Chain,Hollow Convex Curb,19.jpg
+20,Chain,Designed Curb,20.jpg
+21,Chain,D/C Figaro,21.jpg
+22,Chain,Flat Figaro,22.jpg
+23,Chain,Concave Figaro,23.jpg
+24,Chain,Hollow Light Figaro,24.jpg
+25,Chain,Rolo Chain,25.jpg
+26,Chain,Hollow Oval Rolo Chain,26.jpg
+27,Chain,D/C Hollow Rolo Chain,27.jpg
+28,Chain,Ball Chain,28.jpg
+29,Chain,Rambo Link Chain Brill,29.jpg
+30,Chain,Oval Link Chain Brill,30.jpg
+31,Chain,Triple Wheat,31.jpg
+32,Chain,Hollow Palm Chain,32.jpg
+33,Chain,D/C 8 Sided Triple Wheat,33.jpg
+34,Chain,Popcorn Brill,34.jpg
+35,Chain,Flat Popcorn,35.jpg
+36,Chain,Mariner Brill,36.jpg
+37,Chain,Flat Mariner,37.jpg
+38,Chain,Hollow Rope,38.jpg
+39,Chain,Mirror Rope,39.jpg
+40,Chain,Fox Tail,40.jpg
+41,Chain,Serpentine,41.jpg
+42,Chain,Square Byzantine,42.jpg
+43,Chain,Euro Byzantine,43.jpg
+44,Chain,Hollow Square Byzantine,44.jpg
+45,Chain,Grek Designed Euro Byzantine,45.jpg
+46,Bracelet,Bangle Bracelet,46.jpg
+47,Bracelet,Cuff Bracelet,47.jpg
+48,Bracelet,Chain Bracelet Bracelet,48.jpg
+49,Bracelet,ID / Plaque Bracelet Bracelet,49.jpg
+50,Bracelet,Tennis Bracelet Bracelet,50.jpg
+51,Bracelet,Charm Bracelet Bracelet,51.jpg
+52,Bracelet,Beaded Bracelet Bracelet,52.jpg
+53,Bracelet,Gourmette Bracelet Bracelet,53.jpg
+54,Ring,Wedding Band,54.jpg
+55,Ring,Solitaire,55.jpg
+56,Ring,Multi-Stone,56.jpg
+57,Ring,Signet / Men's Ring,57.jpg
+58,Ring,Fashion / Statement Ring,58.jpg
+59,Ring,Midi Ring,59.jpg
+60,Ring,Eternity Band,60.jpg
+61,Necklace,Pendant Necklace,61.jpg
+62,Necklace,Medallion,62.jpg
+63,Necklace,Letter / Initial,63.jpg
+64,Necklace,Symbol / Figure,64.jpg
+65,Necklace,Choker,65.jpg
+66,Necklace,Statement Necklace,66.jpg
+67,Necklace,Layered Necklace,67.jpg
+68,8K Gold Collection,8K Chain,68.jpg
+69,8K Gold Collection,8K Bracelet,69.jpg
+70,8K Gold Collection,8K Ring,70.jpg
+71,8K Gold Collection,8K Necklace,71.jpg
+72,8K Gold Collection,8K Earrings,72.jpg
+73,8K Gold Collection,8K Pendant,73.jpg
+74,Tobacco Pipe,Meerschaum Billiard Pipe,74.jpg
+75,Tobacco Pipe,Meerschaum Bent Pipe,75.jpg
+76,Tobacco Pipe,Briar Wood Apple Pipe,76.jpg
+77,Tobacco Pipe,Briar Wood Dublin Pipe,77.jpg
+78,Tobacco Pipe,Olive Wood Canadian Pipe,78.jpg
+79,Tobacco Pipe,Morta (Bog Oak) Bulldog Pipe,79.jpg
+80,Tobacco Pipe,Corn Cob Poker Pipe,80.jpg
+81,Tobacco Pipe,Briar Wood Billiard Pipe,81.jpg
