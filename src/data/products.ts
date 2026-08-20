@@ -1,32 +1,38 @@
 import type { Product } from "@/lib/types";
 import {
   KARATS, COLORS, CHAIN_MFG, CHAIN_FINISH, CLASPS, STOCK,
-  CHAIN_STYLES, CHAIN_WIDTHS, CHAIN_LENGTHS,
+  CHAIN_WIDTHS, CHAIN_LENGTHS,
   BRACELET_TYPES, BRACELET_LENGTHS, BRACELET_WIDTHS, BRACELET_MFG, STONE_TYPES,
   RING_TYPES, RING_SIZES, RING_SETTINGS, RING_MFG, RING_FINISH,
   NECKLACE_TYPES, NECKLACE_LENGTHS, NECKLACE_MFG,
-  K8_TYPES, K8_MFG, K8_MARKETS,
+  K8_MFG,
   PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
   pick,
 } from "./options";
+import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT, TIER_BY_DIFFICULTY } from "./fineJewelryData";
+import { CHAIN_ITEMS } from "./chainData";
 
 /* ============================================================
    DEMO PRODUCT GENERATION
-   Ported 1:1 from the original catalog. Every category's attribute
-   values are deterministically spread across its items using pick(),
-   so the output is stable across builds/reloads.
+   Every category's attribute values are deterministically spread across
+   its items using pick(), so the output is stable across builds/reloads.
    ============================================================ */
 function buildProducts(): Product[] {
   const products: Product[] = [];
   let uid = 1;
 
-  CHAIN_STYLES.forEach((style, i) => {
+  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. Only fields
+  // actually present in the client sheet are used (name, chain type, workmanship
+  // difficulty, catalog code, thickness, weight). Karat/Color/Clasp/Stone aren't
+  // in the sheet, so — like Tobacco Pipe — they're set to "—" rather than
+  // demo-assigned. Length isn't in the sheet either; fixed at 50cm per instruction.
+  CHAIN_ITEMS.forEach((item) => {
     products.push({
-      id: uid++, category: "Chain", name: style,
-      karat: pick(KARATS, i), color: pick(COLORS, i + 2), mfg: pick(CHAIN_MFG, i),
-      finish: pick(CHAIN_FINISH, i + 1), clasp: pick(CLASPS, i), stone: "No Stone",
-      width: pick(CHAIN_WIDTHS, i + 3), length: pick(CHAIN_LENGTHS, i),
-      weight: +(3 + ((i * 1.37) % 22)).toFixed(1), stock: pick(STOCK, i % 3 === 0 ? 1 : 0),
+      id: uid++, category: "Chain", name: item.name,
+      chainType: item.chainType, difficulty: item.difficulty, sku: item.sku, webCode: item.webCode,
+      karat: "—", color: "—", mfg: "—", finish: "—", clasp: "—", stone: "—",
+      width: item.thickness, length: 50,
+      weight: item.weight, stock: "In Stock",
       price: 0, imgSlug: "",
     });
   });
@@ -64,15 +70,21 @@ function buildProducts(): Product[] {
     });
   });
 
-  K8_TYPES.forEach((t, i) => {
+  FINE_JEWELRY_ITEMS.forEach((item, i) => {
+    const color = pick(COLORS, i);
+    const finish = pick(CHAIN_FINISH, i + 1);
     products.push({
-      id: uid++, category: "8K Gold Collection", name: "8K " + t, k8type: t,
-      karat: "8K (333)", color: pick(COLORS, i), mfg: pick(K8_MFG, i),
-      finish: pick(CHAIN_FINISH, i + 1), clasp: (t === "Chain" || t === "Bracelet") ? pick(CLASPS, i) : "—",
-      stone: pick(STONE_TYPES, i), market: pick(K8_MARKETS, i),
+      id: uid++, category: "8K Gold Collection", name: item.name,
+      fineCategory: SUB_CATEGORY_TO_PARENT[item.subCategory] ?? item.subCategory,
+      fineSubCategory: item.subCategory,
+      difficulty: item.difficulty, tier: TIER_BY_DIFFICULTY[item.difficulty], popularity: item.popularity,
+      karat: "8K (333)", color, mfg: pick(K8_MFG, i),
+      finish, clasp: "—",
+      stone: pick(STONE_TYPES, i),
       width: pick(CHAIN_WIDTHS, i), length: pick(CHAIN_LENGTHS, i),
-      weight: +(3 + ((i * 1.9) % 12)).toFixed(1), stock: pick(STOCK, i % 2),
+      weight: +(2 + ((i * 1.7) % 16)).toFixed(1), stock: pick(STOCK, i % 2),
       price: 0, imgSlug: "",
+      description: item.description,
     });
   });
 
@@ -106,6 +118,11 @@ const GOLD_PRICE_PER_GRAM = 85; // USD, spot approximation used for demo pricing
 function computePrice(p: Product): number {
   if (p.category === "Tobacco Pipe") {
     return Math.round(35 + p.weight * 0.9);
+  }
+  // Fine Jewelry (8K Gold Collection) is priced on request, not listed — see OrderPanel's
+  // "Contact for Pricing" handling for carts made up entirely of these items.
+  if (p.category === "8K Gold Collection") {
+    return 0;
   }
   const purity = KARAT_PURITY[p.karat] || 0.75;
   const raw = p.weight * purity * GOLD_PRICE_PER_GRAM * 1.18; // + workmanship markup

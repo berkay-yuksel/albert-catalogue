@@ -10,8 +10,11 @@ const VARIANTS: (1 | 2 | 3)[] = [1, 2, 3];
 
 function specTags(p: Product): string[] {
   const tags: string[] = [];
-  if (p.karat && p.karat !== "—") tags.push(p.karat);
-  if (p.color && p.color !== "—") tags.push(p.color);
+  if (p.sku) tags.push(p.sku);
+  else {
+    if (p.karat && p.karat !== "—") tags.push(p.karat);
+    if (p.color && p.color !== "—") tags.push(p.color);
+  }
   if (p.width) tags.push(p.width + "mm");
   if (p.length) tags.push(p.length + "cm");
   if (p.size) tags.push(p.size);
@@ -69,7 +72,7 @@ export function ProductCard({
         </div>
       </div>
       <div className="card-body">
-        <div className="card-cat">{CAT_LABELS[product.category]}</div>
+        <div className="card-cat">{product.chainType ?? CAT_LABELS[product.category]}</div>
         <div className="card-name">{product.name}</div>
         <div className="card-price">{fmtPrice(product.price)}</div>
         <div className="card-specs">

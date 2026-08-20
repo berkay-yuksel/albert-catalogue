@@ -35,16 +35,33 @@ export interface Product {
   stock: StockStatus;
   price: number;
 
+  /** Real catalog product code ("Katalog Ürün Kodu"), e.g. "0001-FOR-20" — currently only Chain items have this. */
+  sku?: string;
+  /** Chain style family (e.g. "Classic Chains", "Hollow Chains") — Chain-only, sourced from the client sheet. */
+  chainType?: string;
+  /** The sheet's own web reference code ("WEB Sayfası Katalog Ürün Kodu"), e.g. "AF Chain 1" — Chain-only. */
+  webCode?: string;
+
   /** e.g. "chain1", "bracelet3" — used to build image file names. */
   imgSlug: string;
+
+  /** Short descriptive blurb — currently only populated for Fine Jewelry (8K) items. */
+  description?: string;
 
   // Ring-only
   setting?: string;
   size?: string;
 
-  // 8K Gold Collection-only
-  k8type?: string;
-  market?: string;
+  // Fine Jewelry (8K Gold Collection)-only — sourced from the client product list
+  /** Broad parent grouping (e.g. "Bracelets", "Diamonds & Gemstones") — 13 values, used as the primary filter. */
+  fineCategory?: string;
+  /** Specific sub-category from the source sheet (e.g. "Men's Bracelets") — 51 values, secondary filter. */
+  fineSubCategory?: string;
+  difficulty?: string;
+  /** Craftsmanship tier derived from difficulty: 1 (Very Easy) – 6 (Very Difficult). Higher = harder. */
+  tier?: number;
+  /** US market demand rating, 1–5. */
+  popularity?: number;
 
   // Tobacco Pipe-only
   material?: string;
@@ -62,6 +79,8 @@ export interface FacetConfig {
   label: string;
   /** Only present for type: "checkbox" facets. */
   values?: string[];
+  /** If true, this facet section starts collapsed in the sidebar. */
+  defaultCollapsed?: boolean;
 }
 
 /* ============================================================
@@ -78,7 +97,7 @@ export type FacetSelections = Record<string, Set<string>>;
 /** facet key -> selected numeric range */
 export type Ranges = Record<string, NumericRange>;
 
-export type SortKey = "name" | "price" | "id";
+export type SortKey = "name" | "price" | "id" | "width" | "weight";
 export type SortDir = "asc" | "desc";
 /** Combined sort value as used by the <select>, e.g. "name-asc". */
 export type SortValue = `${SortKey}-${SortDir}`;

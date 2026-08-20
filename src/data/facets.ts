@@ -1,38 +1,46 @@
 import type { Category, FacetConfig } from "@/lib/types";
 import {
-  KARATS, COLORS, CHAIN_MFG, CHAIN_FINISH, CLASPS, STOCK, STONE_TYPES,
+  KARATS, COLORS, CHAIN_FINISH, CLASPS, STOCK, STONE_TYPES,
   BRACELET_MFG, RING_MFG, RING_FINISH, RING_SETTINGS, RING_SIZES,
-  NECKLACE_MFG, K8_TYPES, K8_MFG, K8_MARKETS,
+  NECKLACE_MFG,
   PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
 } from "./options";
+import { FINE_JEWELRY_PARENT_CATEGORIES, FINE_JEWELRY_SUB_CATEGORIES } from "./fineJewelryData";
+import { CHAIN_TYPES, CHAIN_DIFFICULTY_LEVELS } from "./chainData";
 
-export const CATEGORIES: Category[] = [
-  "Chain", "Bracelet", "Ring", "Necklace", "8K Gold Collection", "Tobacco Pipe",
-];
+/** Categories shown in the navigation tabs. Bracelet/Ring/Necklace still exist
+ *  as data (used by CATEGORY_FACETS etc.) but are intentionally left out of
+ *  the nav per current site scope. */
+export const CATEGORIES: Category[] = ["Chain", "Tobacco Pipe", "8K Gold Collection"];
 
 export const CAT_LABELS: Record<Category, string> = {
-  "Chain": "Chains",
+  "Chain": "Gold Chains",
   "Bracelet": "Bracelets",
   "Ring": "Rings",
   "Necklace": "Necklaces",
-  "8K Gold Collection": "8K Collection",
+  "8K Gold Collection": "Fine Jewelry",
   "Tobacco Pipe": "Tobacco Pipes",
 };
+
+/** The category that gets the simplified, list-only "Fine Jewelry" table. */
+export const FINE_JEWELRY_CATEGORY: Category = "8K Gold Collection";
 
 /* ============================================================
    PER-CATEGORY FILTER CONFIG
    ============================================================ */
 export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
+  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. Filters are
+  // limited to what the client sheet actually provides: Chain Type,
+  // Workmanship Difficulty, Thickness, and Weight. Karat/Color/Clasp/Stock
+  // aren't in the sheet, so — like Fine Jewelry — they're left out of the
+  // filter set (the fields still exist on the product as "—" for consistency
+  // with the rest of the UI, they're just not filterable). "Type" is placed
+  // last and starts collapsed since it has 42 values.
   "Chain": [
-    { key: "karat", type: "checkbox", label: "Karat", values: [...KARATS] },
-    { key: "color", type: "checkbox", label: "Gold Color", values: [...COLORS] },
-    { key: "mfg", type: "checkbox", label: "Manufacturing Type", values: [...CHAIN_MFG] },
-    { key: "finish", type: "checkbox", label: "Finish / Coating", values: [...CHAIN_FINISH] },
-    { key: "clasp", type: "checkbox", label: "Clasp Type", values: [...CLASPS] },
-    { key: "stock", type: "checkbox", label: "Stock Status", values: [...STOCK] },
-    { key: "width", type: "range", label: "Thickness (mm)" },
-    { key: "length", type: "range", label: "Length (cm)" },
+    { key: "difficulty", type: "checkbox", label: "Workmanship Difficulty Level", values: [...CHAIN_DIFFICULTY_LEVELS] },
+    { key: "width", type: "range", label: "Chain Thickness (mm)" },
     { key: "weight", type: "range", label: "Weight (g)" },
+    { key: "chainType", type: "checkbox", label: "Type", values: [...CHAIN_TYPES] },
   ],
   "Bracelet": [
     { key: "karat", type: "checkbox", label: "Karat", values: [...KARATS] },
@@ -68,15 +76,11 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
     { key: "length", type: "range", label: "Chain Length (cm)" },
     { key: "weight", type: "range", label: "Weight (g)" },
   ],
+  // Fine Jewelry filters are intentionally minimal — just the two-level
+  // category structure, nothing else (per current site scope).
   "8K Gold Collection": [
-    { key: "k8type", type: "checkbox", label: "Product Type", values: [...K8_TYPES] },
-    { key: "color", type: "checkbox", label: "Gold Color", values: [...COLORS] },
-    { key: "mfg", type: "checkbox", label: "Manufacturing Type", values: [...K8_MFG] },
-    { key: "finish", type: "checkbox", label: "Finish / Coating", values: [...CHAIN_FINISH] },
-    { key: "stone", type: "checkbox", label: "Stone Type", values: [...STONE_TYPES] },
-    { key: "market", type: "checkbox", label: "Target Export Market", values: [...K8_MARKETS] },
-    { key: "stock", type: "checkbox", label: "Stock Status", values: [...STOCK] },
-    { key: "weight", type: "range", label: "Weight (g)" },
+    { key: "fineCategory", type: "checkbox", label: "Category", values: [...FINE_JEWELRY_PARENT_CATEGORIES] },
+    { key: "fineSubCategory", type: "checkbox", label: "Sub Category", values: [...FINE_JEWELRY_SUB_CATEGORIES] },
   ],
   "Tobacco Pipe": [
     { key: "material", type: "checkbox", label: "Material", values: [...PIPE_MATERIALS] },

@@ -8,9 +8,14 @@ export interface OrderCartApi {
   items: Record<number, number>;
   itemCount: number;
   totalWeight: (products: Product[]) => number;
+  totalPrice: (products: Product[]) => number;
   add: (productId: number) => void;
+  /** Adds a specific quantity at once (e.g. from a manual "amount" field). */
+  addQty: (productId: number, qty: number) => void;
   remove: (productId: number) => void;
   changeQty: (productId: number, delta: number) => void;
+  /** Sets an exact quantity (e.g. from a manual text input). Values <= 0 remove the item. */
+  setQty: (productId: number, qty: number) => void;
   clear: () => void;
 }
 
@@ -32,6 +37,11 @@ export function useOrderCart(): OrderCartApi {
     setItems((prev) => ({ ...prev, [productId]: (prev[productId] ?? 0) + 1 }));
   }
 
+  function addQty(productId: number, qty: number) {
+    if (qty <= 0) return;
+    setItems((prev) => ({ ...prev, [productId]: (prev[productId] ?? 0) + qty }));
+  }
+
   function remove(productId: number) {
     setItems((prev) => {
       const next = { ...prev };
@@ -50,6 +60,15 @@ export function useOrderCart(): OrderCartApi {
     });
   }
 
+  function setQty(productId: number, qty: number) {
+    setItems((prev) => {
+      const copy = { ...prev };
+      if (qty <= 0) delete copy[productId];
+      else copy[productId] = qty;
+      return copy;
+    });
+  }
+
   function clear() {
     setItems({});
   }
@@ -61,5 +80,12 @@ export function useOrderCart(): OrderCartApi {
     }, 0);
   }
 
-  return { items, itemCount, totalWeight, add, remove, changeQty, clear };
+  function totalPrice(products: Product[]): number {
+    return Object.entries(items).reduce((sum, [id, qty]) => {
+      const p = products.find((x) => x.id === Number(id));
+      return sum + (p ? p.price * qty : 0);
+    }, 0);
+  }
+
+  return { items, itemCount, totalWeight, totalPrice, add, addQty, remove, changeQty, setQty, clear };
 }

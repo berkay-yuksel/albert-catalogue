@@ -1,0 +1,59 @@
+"use client";
+
+import { useState } from "react";
+import type { Product } from "@/lib/types";
+import { ProductImage } from "./ProductImage";
+
+export function FineJewelryRow({
+  product,
+  onAdd,
+}: {
+  product: Product;
+  onAdd: (productId: number, qty: number) => void;
+}) {
+  const [amount, setAmount] = useState(1);
+
+  return (
+    <tr>
+      <td>
+        <div className="row-swatch">
+          <ProductImage product={product} variant={1} />
+        </div>
+      </td>
+      <td>
+        <div className="row-name">{product.name}</div>
+        {product.popularity !== undefined && (
+          <span className="row-stars" title={`${product.popularity}/5 US market demand`}>
+            {"★".repeat(product.popularity)}
+            {"☆".repeat(5 - product.popularity)}
+          </span>
+        )}
+      </td>
+      <td className="row-cat">{product.fineSubCategory ?? "—"}</td>
+      <td className="row-desc">
+        {product.description ?? "—"}
+        {product.tier !== undefined && <span className="spec-tag row-difficulty">Tier {product.tier}</span>}
+      </td>
+      <td>
+        <input
+          type="number"
+          className="qty-input"
+          min={1}
+          value={amount}
+          onChange={(e) => {
+            const v = parseInt(e.target.value, 10);
+            setAmount(Number.isFinite(v) && v > 0 ? v : 1);
+          }}
+        />
+      </td>
+      <td>
+        <button
+          className="add-text-btn"
+          onClick={() => onAdd(product.id, amount)}
+        >
+          Add
+        </button>
+      </td>
+    </tr>
+  );
+}

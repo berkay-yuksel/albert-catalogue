@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import type { Category, FacetSelections, Ranges, SortValue, ViewMode } from "@/lib/types";
 import type { Product } from "@/lib/types";
-import { CATEGORIES, CATEGORY_FACETS } from "@/data/facets";
+import { CATEGORIES, CATEGORY_FACETS, FINE_JEWELRY_CATEGORY } from "@/data/facets";
+import { sortOptionsForCategory } from "@/data/sortOptions";
 import { applyFilters, buildChips, buildEmptyFacetState, sortProducts, type Chip } from "@/lib/filtering";
 
 import { Topbar } from "./Topbar";
@@ -12,6 +13,7 @@ import { CategoryTabs } from "./CategoryTabs";
 import { Sidebar } from "./Sidebar";
 import { ProductCard } from "./ProductCard";
 import { ProductRow } from "./ProductRow";
+import { FineJewelryTable } from "./FineJewelryTable";
 import { ActiveChips } from "./ActiveChips";
 import { EmptyState } from "./EmptyState";
 import { ProductModal } from "./ProductModal";
@@ -24,6 +26,7 @@ export function CatalogClient({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category>(DEFAULT_CATEGORY);
   const [sort, setSort] = useState<SortValue>("name-asc");
+  // Default to grid view — list is opt-in via the view toggle.
   const [view, setView] = useState<ViewMode>("grid");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -31,8 +34,13 @@ export function CatalogClient({ products }: { products: Product[] }) {
   const [addPulse, setAddPulse] = useState(0);
   const cart = useOrderCart();
 
-  function handleAdd(productId: number) {
-    cart.add(productId);
+  const isFineJewelry = activeCategory === FINE_JEWELRY_CATEGORY;
+  // Fine Jewelry only ever shows as a list, regardless of the last-selected view.
+  const effectiveView: ViewMode = isFineJewelry ? "list" : view;
+  const sortOptions = useMemo(() => sortOptionsForCategory(activeCategory), [activeCategory]);
+
+  function handleAdd(productId: number, qty: number = 1) {
+    cart.addQty(productId, qty);
     setAddPulse((n) => n + 1);
   }
 
@@ -45,6 +53,10 @@ export function CatalogClient({ products }: { products: Product[] }) {
     setActiveCategory(c);
     setSearch("");
     setFacetState(buildEmptyFacetState(CATEGORY_FACETS[c]));
+    if (c === FINE_JEWELRY_CATEGORY) setView("list");
+    // Reset to a sort option that's guaranteed to exist for the new category
+    // (e.g. Chain-only "Thickness" sort wouldn't be valid elsewhere).
+    setSort("name-asc");
   }
 
   function toggleFacetValue(key: string, value: string, checked: boolean) {
@@ -98,8 +110,10 @@ export function CatalogClient({ products }: { products: Product[] }) {
 
   return (
     <>
-      <Topbar onOpenFilters={() => setMobileFiltersOpen(true)} />
-      <CategoryTabs activeCategory={activeCategory} onSelect={selectCategory} />
+      <div className="sticky-header">
+        <Topbar onOpenFilters={() => setMobileFiltersOpen(true)} />
+        <CategoryTabs activeCategory={activeCategory} onSelect={selectCategory} />
+      </div>
 
       <div className="layout">
         <Sidebar
@@ -119,8 +133,10 @@ export function CatalogClient({ products }: { products: Product[] }) {
             onSearchChange={setSearch}
             sort={sort}
             onSortChange={setSort}
-            view={view}
+            sortOptions={sortOptions}
+            view={effectiveView}
             onViewChange={setView}
+            showViewToggle={!isFineJewelry}
           />
 
           <div className="results-bar">
@@ -135,7 +151,9 @@ export function CatalogClient({ products }: { products: Product[] }) {
 
           {sorted.length === 0 ? (
             <EmptyState onClear={clearAll} />
-          ) : view === "grid" ? (
+          ) : isFineJewelry ? (
+            <FineJewelryTable products={sorted} onAdd={handleAdd} />
+          ) : effectiveView === "grid" ? (
             <div className="grid-view">
               {sorted.map((p) => (
                 <ProductCard product={p} key={p.id} onOpen={setSelectedProduct} onAdd={handleAdd} />
@@ -152,16 +170,18 @@ export function CatalogClient({ products }: { products: Product[] }) {
                         Product Name {sortArrow("name")}
                       </th>
                       <th>Category</th>
-                      <th>Karat</th>
-                      <th>Color</th>
-                      <th>Thickness</th>
+                      <th>Product Code</th>
+                      <th className="sortable" onClick={() => handleHeaderClick("width")}>
+                        Thickness {sortArrow("width")}
+                      </th>
                       <th>Length</th>
-                      <th>Weight</th>
+                      <th className="sortable" onClick={() => handleHeaderClick("weight")}>
+                        Weight {sortArrow("weight")}
+                      </th>
                       <th className="sortable" onClick={() => handleHeaderClick("price")}>
                         Price {sortArrow("price")}
                       </th>
                       <th>Stock</th>
-                      <th>Amount</th>
                       <th></th>
                     </tr>
                   </thead>

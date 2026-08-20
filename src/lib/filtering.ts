@@ -65,6 +65,10 @@ export function sortProducts(list: Product[], sort: SortValue): Product[] {
         return mul * (a.price - b.price);
       case "id":
         return mul * (a.id - b.id);
+      case "width":
+        return mul * (a.width - b.width);
+      case "weight":
+        return mul * (a.weight - b.weight);
       default:
         return 0;
     }

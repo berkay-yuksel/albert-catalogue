@@ -5,6 +5,9 @@ import type { Category, FacetConfig, FacetSelections, Product, Ranges } from "@/
 import { PRODUCTS } from "@/data/products";
 import { CATEGORY_FACETS, CAT_LABELS } from "@/data/facets";
 
+/** Checkbox facets longer than this show a truncated list + "Show All" toggle. */
+const VISIBLE_LIMIT = 8;
+
 function valueCounts(products: Product[], key: keyof Product, values: string[]) {
   const counts = Object.fromEntries(values.map((v) => [v, 0])) as Record<string, number>;
   products.forEach((p) => {
@@ -34,13 +37,36 @@ export function Sidebar({
   open: boolean;
   onCloseMobile: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
-
   const config: FacetConfig[] = CATEGORY_FACETS[activeCategory];
   const scoped = PRODUCTS.filter((p) => p.category === activeCategory);
 
+  function defaultCollapsedSet(cfg: FacetConfig[]): Set<string> {
+    return new Set(cfg.filter((f) => f.defaultCollapsed).map((f) => f.key));
+  }
+
+  // Reset which facets start collapsed whenever the category changes (each
+  // category has its own config/defaults) — adjusted during render rather
+  // than in an effect, see https://react.dev/learn/you-might-not-need-an-effect
+  const [prevCategory, setPrevCategory] = useState(activeCategory);
+  const [collapsed, setCollapsed] = useState<Set<string>>(() => defaultCollapsedSet(config));
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
+  if (activeCategory !== prevCategory) {
+    setPrevCategory(activeCategory);
+    setCollapsed(defaultCollapsedSet(config));
+    setExpanded(new Set());
+  }
+
   function toggleCollapsed(key: string) {
     setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function toggleExpanded(key: string) {
+    setExpanded((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -70,6 +96,9 @@ export function Sidebar({
               if (f.type === "checkbox" && f.values) {
                 const counts = valueCounts(scoped, f.key, f.values);
                 const selected = facetSelections[f.key];
+                const isLong = f.values.length > VISIBLE_LIMIT;
+                const isExpanded = expanded.has(f.key);
+                const visibleValues = isLong && !isExpanded ? f.values.slice(0, VISIBLE_LIMIT) : f.values;
                 return (
                   <div className={`facet ${isCollapsed ? "collapsed" : ""}`} key={f.key}>
                     <div className="facet-title" onClick={() => toggleCollapsed(f.key)}>
@@ -77,7 +106,7 @@ export function Sidebar({
                       <span className="chevron">▾</span>
                     </div>
                     <div className="facet-body">
-                      {f.values.map((v) => (
+                      {visibleValues.map((v) => (
                         <label className="facet-option" key={v}>
                           <input
                             type="checkbox"
@@ -88,6 +117,11 @@ export function Sidebar({
                           <span className="count">{counts[v]}</span>
                         </label>
                       ))}
+                      {isLong && (
+                        <button className="show-all-btn" onClick={() => toggleExpanded(f.key)}>
+                          {isExpanded ? "Show Less" : `Show All (${f.values.length})`}
+                        </button>
+                      )}
                     </div>
                   </div>
                 );

@@ -7,6 +7,10 @@ export interface DetailField {
 }
 
 export const DETAIL_FIELDS: DetailField[] = [
+  { key: "sku", label: "Product Code" },
+  { key: "webCode", label: "Web Catalog Code" },
+  { key: "chainType", label: "Chain Type" },
+  { key: "difficulty", label: "Workmanship Difficulty Level" },
   { key: "karat", label: "Karat" },
   { key: "color", label: "Gold Color" },
   { key: "mfg", label: "Manufacturing Type" },
@@ -15,8 +19,9 @@ export const DETAIL_FIELDS: DetailField[] = [
   { key: "stone", label: "Stone Type" },
   { key: "setting", label: "Stone Setting Type" },
   { key: "size", label: "Ring Size" },
-  { key: "k8type", label: "Product Type" },
-  { key: "market", label: "Target Export Market" },
+  { key: "fineCategory", label: "Category" },
+  { key: "fineSubCategory", label: "Sub Category" },
+  { key: "tier", label: "Craftsmanship Tier" },
   { key: "material", label: "Material" },
   { key: "shape", label: "Shape / Model" },
   { key: "filter", label: "Filter Size" },

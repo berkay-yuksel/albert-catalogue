@@ -46,7 +46,9 @@ export function ProductModal({
     <div className="modal-overlay open" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="modal">
         <div className="modal-media">
-        
+          <button className="modal-close" onClick={onClose} aria-label="Close">
+            ✕
+          </button>
           <span className="img-label">{GALLERY[imgIndex].label}</span>
           <button className="img-nav prev" onClick={() => step(-1)} aria-label="Previous image">
             ‹

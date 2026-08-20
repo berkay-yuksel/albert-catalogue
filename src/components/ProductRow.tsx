@@ -26,9 +26,8 @@ export function ProductRow({
       <td>
         <div className="row-name">{product.name}</div>
       </td>
-      <td className="row-cat">{CAT_LABELS[product.category]}</td>
-      <td className="mono">{product.karat || "—"}</td>
-      <td>{product.color || "—"}</td>
+      <td className="row-cat">{product.chainType ?? CAT_LABELS[product.category]}</td>
+      <td className="mono">{product.sku ?? "—"}</td>
       <td className="mono">{product.width ? product.width + " mm" : "—"}</td>
       <td className="mono">{product.length ? product.length + " cm" : "—"}</td>
       <td className="mono">{product.weight} g</td>
@@ -37,15 +36,6 @@ export function ProductRow({
         <span className={`stock-dot ${inStock ? "instock" : "order"}`}>
           {inStock ? "In Stock" : "Made to Order"}
         </span>
-      </td>
-      <td>
-        <input
-          type="number"
-          className="qty-input"
-          min={1}
-          defaultValue={1}
-          onClick={(e) => e.stopPropagation()}
-        />
       </td>
       <td>
         <button
