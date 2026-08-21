@@ -51,11 +51,11 @@ input, select{font-family:inherit;}
 .brand-mark::before{content:''; position:absolute; inset:6px; border:1px solid var(--gold); border-radius:50%;}
 .brand h1{font-family:var(--font-display); font-weight:600; font-size:19px; letter-spacing:0.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .brand span{color:var(--text-dim); font-size:11px; text-transform:uppercase; letter-spacing:0.14em; display:block; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.search-wrap{position:relative; flex:1 1 240px; max-width:340px;}
-.search-wrap input{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text); padding:9px 12px 9px 32px; border-radius:var(--radius); font-size:13px; outline:none;}
+.search-wrap{position:relative; flex:1 1 240px; max-width:340px; min-width:0;}
+.search-wrap input{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text); padding:9px 12px 9px 34px; border-radius:var(--radius); font-size:13px; outline:none; box-sizing:border-box;}
 .search-wrap input:focus{border-color:var(--gold);}
-.search-wrap input::placeholder{color:var(--text-dim);}
-.search-icon{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--text-dim); font-size:13px; pointer-events:none;}
+.search-wrap input::placeholder{color:var(--text-dim); overflow:hidden; text-overflow:ellipsis;}
+.search-icon{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--text-dim); font-size:13px; line-height:1; pointer-events:none;}
 .topbar-controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .content-controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
 .sort-select{background:var(--panel); border:1px solid var(--line); color:var(--text); padding:9px 10px; border-radius:var(--radius); font-size:12.5px; outline:none;}
@@ -64,7 +64,7 @@ input, select{font-family:inherit;}
 .view-toggle button{background:var(--panel); border:none; color:var(--text-dim); padding:9px 12px; font-size:12px; display:flex; align-items:center; gap:6px; transition:background .15s, color .15s; white-space:nowrap;}
 .view-toggle button.active{background:var(--gold); color:#191410; font-weight:600;}
 .view-toggle button:not(.active):hover{color:var(--text);}
-.filter-drawer-btn{display:none; background:var(--panel); border:1px solid var(--line); color:var(--text); padding:9px 12px; border-radius:var(--radius); font-size:12.5px; flex-shrink:0;}
+.filter-drawer-btn{display:none; background:var(--panel); border:1px solid var(--line); color:var(--text); padding:9px 12px; border-radius:var(--radius); font-size:12.5px; flex-shrink:0; align-items:center; gap:6px;}
 
 /* ============ CATEGORY TABS ============ */
 .cat-tabs{
@@ -142,8 +142,10 @@ input, select{font-family:inherit;}
 .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; transition:border-color .15s, transform .15s; cursor:pointer;}
 .card:hover{border-color:var(--gold); transform:translateY(-2px);}
 .card-media{aspect-ratio:1/1; background:radial-gradient(circle at 30% 20%, rgba(201,160,80,0.10), transparent 60%), #100D09; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
-.card-img-stage{display:flex; align-items:center; justify-content:center; width:100%; height:100%;}
+.card-img-stage{display:flex; align-items:center; justify-content:center; width:100%; height:100%; position:relative;}
 .card-img-stage img{width:100%; height:100%; object-fit:cover; display:block;}
+.card-img-stage .img-hover{position:absolute; inset:0; opacity:0; transition:opacity .45s ease;}
+.card:hover .card-img-stage .img-hover{opacity:1;}
 .img-placeholder{width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; font-family:var(--font-display); font-size:12.5px; color:var(--text-dim); background:linear-gradient(135deg, var(--panel), var(--panel-2)); border:1px dashed var(--line);}
 .stock-badge{position:absolute; top:8px; left:8px; font-size:9.5px; text-transform:uppercase; letter-spacing:0.06em; padding:3px 7px; border-radius:20px; font-weight:600;}
 .stock-badge.instock{background:rgba(107,150,106,0.16); color:#8FBF8C; border:1px solid rgba(143,191,140,0.35);}
@@ -331,8 +333,11 @@ tbody td{padding:9px 14px; vertical-align:middle; white-space:nowrap;}
   .sidebar{top:0; max-height:100vh;}
 }
 @media (max-width:640px){
-  .content-controls{flex-direction:column; align-items:stretch;}
-  .search-wrap{max-width:none;}
+  .content-controls{flex-direction:column; align-items:stretch; gap:8px;}
+  /* Own row already, so it doesn't need to be artificially narrowed — that
+     was actually squeezing the icon + placeholder together uncomfortably.
+     A comfortable cap (not edge-to-edge, not overly narrow) works best. */
+  .search-wrap{max-width:88%; flex-basis:auto;}
   .topbar-controls{width:100%;}
   .sort-select{flex:1 1 auto; min-width:0;}
   .view-toggle{flex:0 0 auto;}
@@ -404,7 +409,7 @@ tbody td{padding:9px 14px; vertical-align:middle; white-space:nowrap;}
 .order-item-qty button{width:22px; height:22px; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:2px; font-size:13px; line-height:1;}
 .order-item-qty button:hover{border-color:var(--gold); color:var(--gold-bright);}
 .order-qty-input{
-  width:48px; background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+  width:64px; background:var(--panel-2); border:1px solid var(--line); color:var(--text);
   padding:4px 6px; border-radius:2px; font-family:var(--font-mono); font-size:12.5px; text-align:center; outline:none;
 }
 .order-qty-input:focus{border-color:var(--gold);}

@@ -1,6 +1,6 @@
 "use client";
 
-export function Topbar({ onOpenFilters }: { onOpenFilters: () => void }) {
+export function Topbar() {
   return (
     <div className="topbar">
       <div className="brand">
@@ -10,9 +10,6 @@ export function Topbar({ onOpenFilters }: { onOpenFilters: () => void }) {
           <span>B2B Wholesale Catalog · Chains · Jewelry · Pipes</span>
         </div>
       </div>
-      <button className="filter-drawer-btn" onClick={onOpenFilters}>
-        ☰ Filters
-      </button>
     </div>
   );
 }

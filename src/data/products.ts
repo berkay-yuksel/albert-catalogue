@@ -9,7 +9,7 @@ import {
   PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
   pick,
 } from "./options";
-import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT, TIER_BY_DIFFICULTY } from "./fineJewelryData";
+import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT, TIER_BY_DIFFICULTY, tierLabel } from "./fineJewelryData";
 import { CHAIN_ITEMS } from "./chainData";
 
 /* ============================================================
@@ -73,11 +73,12 @@ function buildProducts(): Product[] {
   FINE_JEWELRY_ITEMS.forEach((item, i) => {
     const color = pick(COLORS, i);
     const finish = pick(CHAIN_FINISH, i + 1);
+    const tier = TIER_BY_DIFFICULTY[item.difficulty];
     products.push({
       id: uid++, category: "8K Gold Collection", name: item.name,
       fineCategory: SUB_CATEGORY_TO_PARENT[item.subCategory] ?? item.subCategory,
       fineSubCategory: item.subCategory,
-      difficulty: item.difficulty, tier: TIER_BY_DIFFICULTY[item.difficulty], popularity: item.popularity,
+      difficulty: item.difficulty, tier, tierLabel: tierLabel(tier), popularity: item.popularity,
       karat: "8K (333)", color, mfg: pick(K8_MFG, i),
       finish, clasp: "—",
       stone: pick(STONE_TYPES, i),

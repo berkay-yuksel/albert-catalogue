@@ -60,6 +60,8 @@ export interface Product {
   difficulty?: string;
   /** Craftsmanship tier derived from difficulty: 1 (Very Easy) – 6 (Very Difficult). Higher = harder. */
   tier?: number;
+  /** Display/filter form of tier, e.g. "S Tier" for tier 6. */
+  tierLabel?: string;
   /** US market demand rating, 1–5. */
   popularity?: number;
 
@@ -97,7 +99,7 @@ export type FacetSelections = Record<string, Set<string>>;
 /** facet key -> selected numeric range */
 export type Ranges = Record<string, NumericRange>;
 
-export type SortKey = "name" | "price" | "id" | "width" | "weight";
+export type SortKey = "name" | "price" | "id" | "width" | "weight" | "sku" | "chainType" | "tier";
 export type SortDir = "asc" | "desc";
 /** Combined sort value as used by the <select>, e.g. "name-asc". */
 export type SortValue = `${SortKey}-${SortDir}`;

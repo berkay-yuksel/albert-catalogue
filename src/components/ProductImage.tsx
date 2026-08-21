@@ -3,21 +3,52 @@
 import { useState } from "react";
 import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
+import { FINE_JEWELRY_CATEGORY_IMAGES } from "@/data/fineJewelryData";
 
 /* ============================================================
    Naming convention (see /public/images/README.txt):
+
+   Chain products (they have a real catalog "sku" from the client sheet)
+   use their product code as the filename, PNG format, only 2 photos:
+     /images/{sku}.png        -> main / standard photo (required)
+     /images/{sku}-zoom.png   -> zoom/detail photo (optional)
+   e.g. /images/0322-KNG-120.png, /images/0322-KNG-120-zoom.png
+
+   Fine Jewelry (8K Gold Collection) products don't have individual photos —
+   every product under a given parent category (product.fineCategory) shares
+   one illustration from /public/catimages, see FINE_JEWELRY_CATEGORY_IMAGES.
+
+   Every other category (no sku) keeps the generic 3-photo scheme:
      /images/{imgSlug}a.jpg  -> main / standard photo (required)
      /images/{imgSlug}b.jpg  -> optional angle photo
      /images/{imgSlug}c.jpg  -> optional zoom/detail photo
-   e.g. the first chain product -> /images/chain1a.jpg, chain1b.jpg, chain1c.jpg
+   e.g. /images/pipe1a.jpg, pipe1b.jpg, pipe1c.jpg
    ============================================================ */
 const IMAGE_BASE_PATH = "/images/";
-const IMAGE_EXT = ".jpg";
+const CATEGORY_IMAGE_BASE_PATH = "/catimages/";
+const GENERIC_IMAGE_EXT = ".jpg";
+const SKU_IMAGE_EXT = ".png";
 const VARIANT_LETTERS = ["a", "b", "c"];
 
+/** How many photo variants a product supports — used by the modal gallery. */
+export function variantCountFor(product: Product): number {
+  if (product.fineCategory) return 1; // shared category illustration, no zoom/angle
+  return product.sku ? 2 : 3;
+}
+
 export function imagePath(product: Product, variant: 1 | 2 | 3): string {
+  if (product.fineCategory) {
+    const file = FINE_JEWELRY_CATEGORY_IMAGES[product.fineCategory];
+    return `${CATEGORY_IMAGE_BASE_PATH}${file ?? "fines.png"}`;
+  }
+  if (product.sku) {
+    // Real catalog photos, named after the product code — no "angle" (variant 2 = zoom here).
+    return variant >= 2
+      ? `${IMAGE_BASE_PATH}${product.sku}-zoom${SKU_IMAGE_EXT}`
+      : `${IMAGE_BASE_PATH}${product.sku}${SKU_IMAGE_EXT}`;
+  }
   const letter = VARIANT_LETTERS[variant - 1] ?? "a";
-  return `${IMAGE_BASE_PATH}${product.imgSlug}${letter}${IMAGE_EXT}`;
+  return `${IMAGE_BASE_PATH}${product.imgSlug}${letter}${GENERIC_IMAGE_EXT}`;
 }
 
 type Stage = "requested" | "main-fallback" | "placeholder";
@@ -35,7 +66,7 @@ export function ProductImage({
 
   if (stage === "placeholder") {
     return (
-      <div className="img-placeholder">
+      <div className={`img-placeholder ${className ?? ""}`}>
         {CAT_LABELS[product.category]}
         <br />
         {product.name}

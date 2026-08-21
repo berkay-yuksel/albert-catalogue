@@ -235,6 +235,25 @@ export const FINE_JEWELRY_PARENT_CATEGORIES: string[] = [
   "Bracelets", "Chains", "Charms & Sets", "Custom & Components", "Diamonds & Gemstones", "Earrings", "Fine Jewelry (General)", "Men's Jewelry", "Necklaces & Pendants", "Pearls", "Rings & Bridal", "Specialty & Body", "Style & Heritage",
 ];
 
+/** One shared illustration per parent category (in /public/catimages) — every
+ *  product under a given parent category shows this same image, since Fine
+ *  Jewelry items don't have individual product photos. */
+export const FINE_JEWELRY_CATEGORY_IMAGES: Record<string, string> = {
+  "Bracelets": "bracelets.png",
+  "Chains": "chains.png",
+  "Charms & Sets": "charms.png",
+  "Custom & Components": "customs.png",
+  "Diamonds & Gemstones": "gems.png",
+  "Earrings": "earrings.png",
+  "Fine Jewelry (General)": "fines.png",
+  "Men's Jewelry": "mens.png",
+  "Necklaces & Pendants": "necklaces.png",
+  "Pearls": "pearls.png",
+  "Rings & Bridal": "bridals.png",
+  "Specialty & Body": "specials.png",
+  "Style & Heritage": "heritages.png",
+};
+
 export const DIFFICULTY_LEVELS: string[] = [
   "Very Easy", "Easy", "Moderate", "Moderately Difficult", "Difficult", "Very Difficult",
 ];
@@ -248,4 +267,22 @@ export const TIER_BY_DIFFICULTY: Record<string, number> = {
   "Difficult": 5,
   "Very Difficult": 6,
 };
+
+/** Tier number -> gaming-style letter grade. Harder craftsmanship = higher letter. */
+export const TIER_LETTER: Record<number, string> = {
+  1: "F",
+  2: "D",
+  3: "C",
+  4: "B",
+  5: "A",
+  6: "S",
+};
+
+/** e.g. "S Tier" for tier 6. Used for both display and the checkbox filter. */
+export function tierLabel(tier: number): string {
+  return `${TIER_LETTER[tier] ?? "?"} Tier`;
+}
+
+/** Letter tiers in best-to-worst order, for the filter list and any fixed ordering. */
+export const TIER_LABELS: string[] = [6, 5, 4, 3, 2, 1].map(tierLabel);
 

@@ -22,10 +22,15 @@ import { useOrderCart } from "@/lib/useOrderCart";
 
 const DEFAULT_CATEGORY: Category = CATEGORIES[0];
 
+/** Gold Chains default-sorts by thickness (High → Low); everything else defaults to name. */
+function defaultSortFor(category: Category): SortValue {
+  return category === "Chain" ? "width-desc" : "name-asc";
+}
+
 export function CatalogClient({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category>(DEFAULT_CATEGORY);
-  const [sort, setSort] = useState<SortValue>("name-asc");
+  const [sort, setSort] = useState<SortValue>(() => defaultSortFor(DEFAULT_CATEGORY));
   // Default to grid view — list is opt-in via the view toggle.
   const [view, setView] = useState<ViewMode>("grid");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -54,9 +59,7 @@ export function CatalogClient({ products }: { products: Product[] }) {
     setSearch("");
     setFacetState(buildEmptyFacetState(CATEGORY_FACETS[c]));
     if (c === FINE_JEWELRY_CATEGORY) setView("list");
-    // Reset to a sort option that's guaranteed to exist for the new category
-    // (e.g. Chain-only "Thickness" sort wouldn't be valid elsewhere).
-    setSort("name-asc");
+    setSort(defaultSortFor(c));
   }
 
   function toggleFacetValue(key: string, value: string, checked: boolean) {
@@ -111,7 +114,7 @@ export function CatalogClient({ products }: { products: Product[] }) {
   return (
     <>
       <div className="sticky-header">
-        <Topbar onOpenFilters={() => setMobileFiltersOpen(true)} />
+        <Topbar />
         <CategoryTabs activeCategory={activeCategory} onSelect={selectCategory} />
       </div>
 
@@ -141,6 +144,9 @@ export function CatalogClient({ products }: { products: Product[] }) {
 
           <div className="results-bar">
             <div className="results-count-group">
+              <button className="filter-drawer-btn" onClick={() => setMobileFiltersOpen(true)}>
+                ☰ Filters
+              </button>
               <div className="results-count">
                 <b>{sorted.length}</b>
                 <span className="results-count-label">products listed</span>
@@ -169,8 +175,12 @@ export function CatalogClient({ products }: { products: Product[] }) {
                       <th className="sortable" onClick={() => handleHeaderClick("name")}>
                         Product Name {sortArrow("name")}
                       </th>
-                      <th>Category</th>
-                      <th>Product Code</th>
+                      <th className="sortable" onClick={() => handleHeaderClick("chainType")}>
+                        Category {sortArrow("chainType")}
+                      </th>
+                      <th className="sortable" onClick={() => handleHeaderClick("sku")}>
+                        Product Code {sortArrow("sku")}
+                      </th>
                       <th className="sortable" onClick={() => handleHeaderClick("width")}>
                         Thickness {sortArrow("width")}
                       </th>

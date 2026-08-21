@@ -5,7 +5,7 @@ import {
   NECKLACE_MFG,
   PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
 } from "./options";
-import { FINE_JEWELRY_PARENT_CATEGORIES, FINE_JEWELRY_SUB_CATEGORIES } from "./fineJewelryData";
+import { FINE_JEWELRY_PARENT_CATEGORIES, FINE_JEWELRY_SUB_CATEGORIES, TIER_LABELS } from "./fineJewelryData";
 import { CHAIN_TYPES, CHAIN_DIFFICULTY_LEVELS } from "./chainData";
 
 /** Categories shown in the navigation tabs. Bracelet/Ring/Necklace still exist
@@ -76,11 +76,12 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
     { key: "length", type: "range", label: "Chain Length (cm)" },
     { key: "weight", type: "range", label: "Weight (g)" },
   ],
-  // Fine Jewelry filters are intentionally minimal — just the two-level
-  // category structure, nothing else (per current site scope).
+  // Fine Jewelry filters: the two-level category structure, plus Tier
+  // (craftsmanship difficulty, shown as a gaming-style letter grade).
   "8K Gold Collection": [
     { key: "fineCategory", type: "checkbox", label: "Category", values: [...FINE_JEWELRY_PARENT_CATEGORIES] },
     { key: "fineSubCategory", type: "checkbox", label: "Sub Category", values: [...FINE_JEWELRY_SUB_CATEGORIES] },
+    { key: "tierLabel", type: "checkbox", label: "Craftsmanship Tier", values: [...TIER_LABELS] },
   ],
   "Tobacco Pipe": [
     { key: "material", type: "checkbox", label: "Material", values: [...PIPE_MATERIALS] },

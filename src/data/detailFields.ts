@@ -21,7 +21,7 @@ export const DETAIL_FIELDS: DetailField[] = [
   { key: "size", label: "Ring Size" },
   { key: "fineCategory", label: "Category" },
   { key: "fineSubCategory", label: "Sub Category" },
-  { key: "tier", label: "Craftsmanship Tier" },
+  { key: "tierLabel", label: "Craftsmanship Tier" },
   { key: "material", label: "Material" },
   { key: "shape", label: "Shape / Model" },
   { key: "filter", label: "Filter Size" },

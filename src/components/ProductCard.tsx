@@ -1,12 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
-import { ProductImage } from "./ProductImage";
-
-const VARIANTS: (1 | 2 | 3)[] = [1, 2, 3];
+import { ProductImage, variantCountFor } from "./ProductImage";
 
 function specTags(p: Product): string[] {
   const tags: string[] = [];
@@ -32,12 +29,7 @@ export function ProductCard({
   onAdd: (productId: number) => void;
 }) {
   const inStock = product.stock === "In Stock";
-  const [imgIdx, setImgIdx] = useState(0);
-
-  function step(dir: number, e: React.MouseEvent) {
-    e.stopPropagation();
-    setImgIdx((i) => (i + dir + VARIANTS.length) % VARIANTS.length);
-  }
+  const hasSecondPhoto = variantCountFor(product) > 1;
 
   return (
     <div className="card" onClick={() => onOpen(product)}>
@@ -56,19 +48,11 @@ export function ProductCard({
         >
           +
         </button>
-        <button className="card-nav prev" onClick={(e) => step(-1, e)} aria-label="Previous image">
-          ‹
-        </button>
-        <button className="card-nav next" onClick={(e) => step(1, e)} aria-label="Next image">
-          ›
-        </button>
         <div className="card-img-stage">
-          <ProductImage product={product} variant={VARIANTS[imgIdx]} key={VARIANTS[imgIdx]} />
-        </div>
-        <div className="card-dots">
-          {VARIANTS.map((v, i) => (
-            <span key={v} className={`dot ${i === imgIdx ? "active" : ""}`} />
-          ))}
+          {/* Both photos stay mounted; hovering just crossfades between them
+              via CSS opacity (no remount = no hard cut). */}
+          <ProductImage product={product} variant={1} className="img-base" />
+          {hasSecondPhoto && <ProductImage product={product} variant={2} className="img-hover" />}
         </div>
       </div>
       <div className="card-body">

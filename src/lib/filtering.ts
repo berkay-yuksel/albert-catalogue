@@ -69,6 +69,12 @@ export function sortProducts(list: Product[], sort: SortValue): Product[] {
         return mul * (a.width - b.width);
       case "weight":
         return mul * (a.weight - b.weight);
+      case "sku":
+        return mul * (a.sku ?? "").localeCompare(b.sku ?? "", undefined, { numeric: true });
+      case "chainType":
+        return mul * (a.chainType ?? "").localeCompare(b.chainType ?? "");
+      case "tier":
+        return mul * ((a.tier ?? 0) - (b.tier ?? 0));
       default:
         return 0;
     }
