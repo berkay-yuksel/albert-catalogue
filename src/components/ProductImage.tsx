@@ -14,7 +14,7 @@ import { FINE_JEWELRY_CATEGORY_IMAGES } from "@/data/fineJewelryData";
      /images/{sku}-zoom.png   -> zoom/detail photo (optional)
    e.g. /images/0322-KNG-120.png, /images/0322-KNG-120-zoom.png
 
-   Fine Jewelry (8K Gold Collection) products don't have individual photos —
+   Fine Jewelry (8K Gold Collection) products don't have individual photos ,
    every product under a given parent category (product.fineCategory) shares
    one illustration from /public/catimages, see FINE_JEWELRY_CATEGORY_IMAGES.
 
@@ -30,7 +30,7 @@ const GENERIC_IMAGE_EXT = ".jpg";
 const SKU_IMAGE_EXT = ".png";
 const VARIANT_LETTERS = ["a", "b", "c"];
 
-/** How many photo variants a product supports — used by the modal gallery. */
+/** How many photo variants a product supports - used by the modal gallery. */
 export function variantCountFor(product: Product): number {
   if (product.fineCategory) return 1; // shared category illustration, no zoom/angle
   return product.sku ? 2 : 3;
@@ -42,7 +42,7 @@ export function imagePath(product: Product, variant: 1 | 2 | 3): string {
     return `${CATEGORY_IMAGE_BASE_PATH}${file ?? "fines.png"}`;
   }
   if (product.sku) {
-    // Real catalog photos, named after the product code — no "angle" (variant 2 = zoom here).
+    // Real catalog photos, named after the product code - no "angle" (variant 2 = zoom here).
     return variant >= 2
       ? `${IMAGE_BASE_PATH}${product.sku}-zoom${SKU_IMAGE_EXT}`
       : `${IMAGE_BASE_PATH}${product.sku}${SKU_IMAGE_EXT}`;

@@ -25,10 +25,10 @@ export function ProductRow({
         <div className="row-name">{product.name}</div>
       </td>
       <td className="row-cat">{product.chainType ?? CAT_LABELS[product.category]}</td>
-      <td className="mono">{product.sku ?? "—"}</td>
-      <td className="mono">{product.karat && product.karat !== "—" ? product.karat : "—"}</td>
-      <td className="mono">{product.width ? product.width + " mm" : "—"}</td>
-      <td className="mono">{product.length ? product.length + " cm" : "—"}</td>
+      <td className="mono">{product.sku ?? "N/A"}</td>
+      <td className="mono">{product.karat && product.karat !== "N/A" ? product.karat : "N/A"}</td>
+      <td className="mono">{product.width ? product.width + " mm" : "N/A"}</td>
+      <td className="mono">{product.length ? product.length + " cm" : "N/A"}</td>
       <td className="mono">{product.weight} g</td>
       <td className="mono">{fmtPrice(product.price)}</td>
       <td>

@@ -47,8 +47,6 @@ input, select{font-family:inherit;}
   display:flex; align-items:center; gap:20px; flex-wrap:wrap;
 }
 .brand{display:flex; align-items:baseline; gap:10px; margin-right:auto; min-width:0;}
-.brand-mark{width:30px; height:30px; border:1px solid var(--gold); border-radius:50%; position:relative; flex-shrink:0;}
-.brand-mark::before{content:''; position:absolute; inset:6px; border:1px solid var(--gold); border-radius:50%;}
 .brand h1{font-family:var(--font-display); font-weight:600; font-size:19px; letter-spacing:0.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .brand span{color:var(--text-dim); font-size:11px; text-transform:uppercase; letter-spacing:0.14em; display:block; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .topbar-pages{display:flex; align-items:center; gap:22px; flex-shrink:0;}
@@ -432,33 +430,6 @@ tbody td{padding:9px 14px; vertical-align:middle; white-space:nowrap;}
   resize:vertical; outline:none; box-sizing:border-box;
 }
 .order-notes-input:focus{border-color:var(--gold);}
-/* Visually hidden (NOT display:none) — some mobile browsers (notably iOS
-   Safari) don't reliably honor the "multiple" file-select attribute, or
-   even open the native picker consistently, on inputs that are display:none.
-   This pattern keeps the input functionally present while invisible. */
-.order-file-input{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; white-space:nowrap; border:0; clip:rect(0,0,0,0);
-}
-.order-dropzone{
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-  border:1px dashed var(--line); border-radius:4px; padding:18px 12px; cursor:pointer;
-  background:var(--panel-2); transition:border-color .15s, background .15s;
-}
-.order-dropzone:hover{border-color:var(--gold);}
-.order-dropzone.dragging{border-color:var(--gold); background:rgba(201,160,80,0.08);}
-.order-dropzone-icon{font-size:18px; color:var(--gold);}
-.order-dropzone-text{font-size:11.5px; color:var(--text-dim); text-align:center; line-height:1.4;}
-.order-attachments{display:flex; flex-wrap:wrap; gap:8px;}
-.order-attachment-thumb{position:relative; width:52px; height:52px; border-radius:4px; overflow:hidden; border:1px solid var(--line); flex-shrink:0;}
-.order-attachment-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
-.order-attachment-thumb button{
-  position:absolute; top:2px; right:2px; width:16px; height:16px; border-radius:50%;
-  background:rgba(20,17,13,0.85); border:1px solid rgba(237,230,214,0.4); color:var(--text);
-  font-size:9px; line-height:1; display:flex; align-items:center; justify-content:center;
-}
-.order-attachment-thumb button:hover{background:var(--rose); border-color:var(--rose); color:#fff;}
-.order-attachments-note{font-size:10.5px; color:var(--text-dim); line-height:1.5; margin-top:2px;}
 
 .order-panel-foot{padding:16px 20px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px;}
 .order-summary{display:flex; justify-content:space-between; font-size:12.5px; color:var(--text-muted);}

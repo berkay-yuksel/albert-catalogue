@@ -12,8 +12,8 @@ const FULL_GALLERY: { variant: 1 | 2 | 3; label: string }[] = [
   { variant: 3, label: "Zoom Detail" },
 ];
 
-/** Products with a real catalog code (currently: Chain) only have 2 photos —
- *  Standard + Zoom, no Angle — so the gallery drops the middle entry. */
+/** Products with a real catalog code (currently: Chain) only have 2 photos ,
+ *  Standard + Zoom, no Angle - so the gallery drops the middle entry. */
 const SKU_GALLERY: { variant: 1 | 2 | 3; label: string }[] = [
   { variant: 1, label: "Standard View" },
   { variant: 2, label: "Zoom Detail" },
@@ -32,7 +32,7 @@ export function ProductModal({
   const gallery = variantCountFor(product) === 2 ? SKU_GALLERY : FULL_GALLERY;
 
   const specs = DETAIL_FIELDS.filter(
-    (f) => product[f.key] !== undefined && product[f.key] !== "—" && product[f.key] !== 0 && product[f.key] !== ""
+    (f) => product[f.key] !== undefined && product[f.key] !== "N/A" && product[f.key] !== 0 && product[f.key] !== ""
   );
 
   function step(dir: number) {

@@ -23,9 +23,9 @@ export function FineJewelryRow({
       <td>
         <div className="row-name">{product.name}</div>
       </td>
-      <td className="row-cat">{product.fineSubCategory ?? "—"}</td>
+      <td className="row-cat">{product.fineSubCategory ?? "N/A"}</td>
       <td className="row-desc">
-        {product.description ?? "—"}
+        {product.description ?? "N/A"}
         {product.tierLabel && <span className="spec-tag row-difficulty">{product.tierLabel}</span>}
       </td>
       <td>

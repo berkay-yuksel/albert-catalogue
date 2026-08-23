@@ -7,9 +7,9 @@ import { ProductImage, variantCountFor } from "./ProductImage";
 
 function specTags(p: Product): string[] {
   const tags: string[] = [];
-  if (p.karat && p.karat !== "—") tags.push(p.karat);
+  if (p.karat && p.karat !== "N/A") tags.push(p.karat);
   tags.push(p.weight + "g");
-  if (p.color && p.color !== "—") tags.push(p.color);
+  if (p.color && p.color !== "N/A") tags.push(p.color);
   if (p.width) tags.push(p.width + "mm");
   if (p.length) tags.push(p.length + "cm");
   if (p.size) tags.push(p.size);

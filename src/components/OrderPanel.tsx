@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Product } from "@/lib/types";
-import { CAT_LABELS } from "@/data/facets";
+import { CAT_LABELS, FINE_JEWELRY_CATEGORY } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 import { buildOrderMailto, buildOrderText } from "@/lib/mailto";
 import type { OrderCartApi } from "@/lib/useOrderCart";
@@ -55,7 +55,7 @@ function OrderItemRow({
   // Local text state so the input doesn't snap back to the old value while
   // the person is still typing a multi-digit quantity. Follows external qty
   // changes (e.g. the +/- buttons) by adjusting during render rather than in
-  // an effect — see https://react.dev/learn/you-might-not-need-an-effect
+  // an effect, see https://react.dev/learn/you-might-not-need-an-effect
   const [prevQty, setPrevQty] = useState(qty);
   const [text, setText] = useState(String(qty));
   if (qty !== prevQty) {
@@ -130,64 +130,32 @@ export function OrderPanel({
 }) {
   const [copied, setCopied] = useState(false);
   const [notes, setNotes] = useState("");
-  const [attachments, setAttachments] = useState<File[]>([]);
   const [mailtoWarning, setMailtoWarning] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const ids = Object.keys(cart.items);
   const totalWeight = cart.totalWeight(products);
   const totalPrice = cart.totalPrice(products);
   const isFreeOrder = ids.length > 0 && totalPrice === 0;
-  const attachmentNames = attachments.map((f) => f.name);
-
-  function addFiles(files: FileList | File[] | null) {
-    if (!files) return;
-    const incoming = Array.from(files).filter((f) => f.type.startsWith("image/"));
-    if (incoming.length === 0) return;
-    setAttachments((prev) => {
-      // Skip exact duplicates (same name+size+lastModified) so re-selecting
-      // or re-dropping the same photo doesn't silently add a second copy
-      // that looks identical — which was confusing ("doesn't update").
-      const isDupe = (a: File, b: File) => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified;
-      const fresh = incoming.filter((f) => !prev.some((p) => isDupe(p, f)));
-      return [...prev, ...fresh];
-    });
-  }
-
-  function removeAttachment(index: number) {
-    setAttachments((prev) => prev.filter((_, i) => i !== index));
-  }
+  const hasFineJewelryItem = ids.some((idStr) => {
+    const p = products.find((x) => x.id === Number(idStr));
+    return p?.category === FINE_JEWELRY_CATEGORY;
+  });
 
   function clearAll() {
     cart.clear();
     setNotes("");
-    setAttachments([]);
     setMailtoWarning(false);
   }
 
-  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    setIsDragging(false);
-    addFiles(e.dataTransfer.files);
-  }
-
-  // Local preview URLs for the attached photos (revoked on change/unmount to
-  // avoid leaking memory — object URLs otherwise persist for the page's life).
-  const previewUrls = useMemo(() => attachments.map((f) => URL.createObjectURL(f)), [attachments]);
-  useEffect(() => {
-    return () => previewUrls.forEach((url) => URL.revokeObjectURL(url));
-  }, [previewUrls]);
-
   // Most mail clients (Outlook desktop especially) silently truncate mailto:
-  // links beyond ~2000 characters — and since our message/photos section is
-  // appended near the end, it's the first thing to get cut off on large
-  // orders. Warn and steer toward "Copy Order" (no length limit) instead of
-  // silently sending an incomplete email.
+  // links beyond ~2000 characters, and since our message is appended near
+  // the end, it's the first thing to get cut off on large orders. Warn and
+  // steer toward "Copy Order" (no length limit) instead of silently sending
+  // an incomplete email.
   const MAILTO_SAFE_LENGTH = 1800;
 
   function sendOrder() {
     if (ids.length === 0) return;
-    const mailto = buildOrderMailto(cart.items, products, { notes, attachmentNames });
+    const mailto = buildOrderMailto(cart.items, products, { notes });
     if (mailto.length > MAILTO_SAFE_LENGTH) {
       setMailtoWarning(true);
       return;
@@ -198,14 +166,14 @@ export function OrderPanel({
 
   async function copyOrder() {
     if (ids.length === 0) return;
-    const text = buildOrderText(cart.items, products, { notes, attachmentNames });
+    const text = buildOrderText(cart.items, products, { notes });
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setMailtoWarning(false);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      // Clipboard API unavailable/denied — fail silently, the person can still use "Send Order Request".
+      // Clipboard API unavailable/denied, fail silently, the person can still use "Send Order Request".
     }
   }
 
@@ -247,7 +215,7 @@ export function OrderPanel({
             })
           )}
         </div>
-        {/* Deliberately OUTSIDE the scrollable .order-items list — always
+        {/* Deliberately OUTSIDE the scrollable .order-items list, always
             visible near the bottom instead of requiring a scroll past the
             item rows to find it. */}
         {ids.length > 0 && (
@@ -263,54 +231,6 @@ export function OrderPanel({
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
             />
-
-            <div className="order-extras-label">Reference Photos</div>
-            <div
-              className={`order-dropzone ${isDragging ? "dragging" : ""}`}
-              onClick={() => fileInputRef.current?.click()}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={(e) => {
-                e.preventDefault();
-                setIsDragging(false);
-              }}
-              onDrop={handleDrop}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                multiple
-                className="order-file-input"
-                onChange={(e) => {
-                  addFiles(e.target.files);
-                  e.target.value = "";
-                }}
-              />
-              <span className="order-dropzone-icon">⇧</span>
-              <span className="order-dropzone-text">Drag &amp; drop photos here, or click to browse</span>
-            </div>
-            {attachments.length > 0 && (
-              <div className="order-attachments">
-                {attachments.map((file, i) => (
-                  <div className="order-attachment-thumb" key={`${file.name}-${i}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element -- local blob: preview, next/image can't handle object URLs */}
-                    <img src={previewUrls[i]} alt={file.name} />
-                    <button onClick={() => removeAttachment(i)} aria-label={`Remove ${file.name}`}>
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            {attachments.length > 0 && (
-              <p className="order-attachments-note">
-                Photos can&apos;t be attached automatically to Copy/Email — their filenames will
-                be listed so you remember to attach them manually.
-              </p>
-            )}
           </div>
         )}
         <div className="order-panel-foot">
@@ -328,13 +248,18 @@ export function OrderPanel({
           </div>
           {isFreeOrder && (
             <div className="order-contact-notice">
-              These items don&apos;t have a listed price — please contact us directly for a quote.
+              These items don&apos;t have a listed price. Please contact us directly for a quote.
             </div>
           )}
           {mailtoWarning && (
             <div className="order-contact-notice">
               This order is too large for email to include everything (some mail clients cut off
               long links). Please use <b>Copy Order</b> instead and paste it into your email.
+            </div>
+          )}
+          {hasFineJewelryItem && (
+            <div className="order-contact-notice">
+              If you have reference images for these, please attach them manually to your email.
             </div>
           )}
           <div className="order-panel-actions">

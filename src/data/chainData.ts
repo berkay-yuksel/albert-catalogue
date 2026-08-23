@@ -2,13 +2,13 @@
    CHAIN PRODUCT CATALOG
    Sourced from the client-provided product list spreadsheet
    ("Liste_Filtre.xlsx", sheet "Sayfa2"). Each entry is one real
-   chain SKU — a specific style + thickness/weight variant.
+   chain SKU - a specific style + thickness/weight variant.
    Many rows share the same style `name` (e.g. "D/C Forzentina")
-   but differ by thickness, weight, and `sku` — that's expected,
+   but differ by thickness, weight, and `sku` - that's expected,
    it mirrors how the wholesale catalog itself is organized (one
    style, several gauge/size variants).
 
-   - chainType: the sheet's "Category" column — the chain's style
+   - chainType: the sheet's "Category" column - the chain's style
      family (e.g. "Classic Chains", "Hollow Chains"), 42 values.
    - difficulty: workmanship level (Low/Medium/High/Very High),
      with the sheet's original parenthetical description kept.

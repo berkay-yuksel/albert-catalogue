@@ -31,7 +31,7 @@ export function CatalogClient({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category>(DEFAULT_CATEGORY);
   const [sort, setSort] = useState<SortValue>(() => defaultSortFor(DEFAULT_CATEGORY));
-  // Default to grid view — list is opt-in via the view toggle.
+  // Default to grid view - list is opt-in via the view toggle.
   const [view, setView] = useState<ViewMode>("grid");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);

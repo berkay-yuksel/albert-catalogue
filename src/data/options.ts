@@ -73,7 +73,7 @@ export const PIPE_BOWL = ["Small", "Medium", "Large"] as const;
 export const PIPE_STEM = ["Acrylic", "Ebonite", "Amber", "Cumberland"] as const;
 export const PIPE_FINISH = ["Smooth", "Sandblasted", "Rusticated"] as const;
 
-/** Deterministic round-robin picker — same helper the original catalog used
+/** Deterministic round-robin picker - same helper the original catalog used
  *  to spread demo attribute values across generated products. */
 export function pick<T>(arr: readonly T[], i: number): T {
   return arr[i % arr.length];

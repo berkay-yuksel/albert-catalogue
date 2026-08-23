@@ -21,7 +21,7 @@ export interface OrderCartApi {
 
 /**
  * In-memory order cart. This is intentionally the only place that knows
- * how cart state is stored — later, when we wire up a database, this hook
+ * how cart state is stored - later, when we wire up a database, this hook
  * is what gets replaced (e.g. with one backed by an API call), and every
  * component that uses `useOrderCart()` keeps working unchanged.
  */

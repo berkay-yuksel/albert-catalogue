@@ -2,7 +2,7 @@
    FINE JEWELRY PRODUCT TAXONOMY
    Sourced from the client-provided product list spreadsheet
    ("Tüm Ürünler.xlsx", sheet "ABD TÜm Lİste (eng)"). Each entry is a
-   distinct jewelry product type sold under the Fine Jewelry tab —
+   distinct jewelry product type sold under the Fine Jewelry tab ,
    used to generate one demo Product per row in data/products.ts.
 
    Two-level category structure:
@@ -235,7 +235,7 @@ export const FINE_JEWELRY_PARENT_CATEGORIES: string[] = [
   "Bracelets", "Chains", "Charms & Sets", "Custom & Components", "Diamonds & Gemstones", "Earrings", "Fine Jewelry (General)", "Men's Jewelry", "Necklaces & Pendants", "Pearls", "Rings & Bridal", "Specialty & Body", "Style & Heritage",
 ];
 
-/** One shared illustration per parent category (in /public/catimages) — every
+/** One shared illustration per parent category (in /public/catimages) - every
  *  product under a given parent category shows this same image, since Fine
  *  Jewelry items don't have individual product photos. */
 export const FINE_JEWELRY_CATEGORY_IMAGES: Record<string, string> = {

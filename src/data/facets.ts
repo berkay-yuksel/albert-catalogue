@@ -35,7 +35,7 @@ export const FINE_JEWELRY_CATEGORY: Category = "8K Gold Collection";
    PER-CATEGORY FILTER CONFIG
    ============================================================ */
 export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
-  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. "Type" is
+  // Chain: real catalog data (330 SKUs) - see data/chainData.ts. "Type" is
   // the primary filter; Workmanship Difficulty was dropped per current site
   // scope. Karat is demo-assigned (not in the client sheet) purely to give
   // buyers a familiar gold-purity filter.

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Topbar } from "@/components/Topbar";
 
 export const metadata: Metadata = {
-  title: "Contact — Albert Family",
-  description: "Get in touch with Albert Family for wholesale gold chain, fine jewelry, and tobacco pipe orders.",
+  title: "Contact | Albert C Jewelry",
+  description: "Get in touch with Albert C Jewelry for wholesale gold chain, fine jewelry, and tobacco pipe orders.",
 };
 
 export default function ContactPage() {
@@ -19,7 +19,7 @@ export default function ContactPage() {
         </Link>
         <h1>Contact Us</h1>
         <p className="static-lede">
-          Have a question about an order, a product, or wholesale pricing? Reach out — our team
+          Have a question about an order, a product, or wholesale pricing? Reach out, our team
           typically responds within one business day.
         </p>
 

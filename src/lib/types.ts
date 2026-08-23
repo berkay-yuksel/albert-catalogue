@@ -35,27 +35,27 @@ export interface Product {
   stock: StockStatus;
   price: number;
 
-  /** Real catalog product code ("Katalog Ürün Kodu"), e.g. "0001-FOR-20" — currently only Chain items have this. */
+  /** Real catalog product code ("Katalog Ürün Kodu"), e.g. "0001-FOR-20" - currently only Chain items have this. */
   sku?: string;
-  /** Chain style family (e.g. "Classic Chains", "Hollow Chains") — Chain-only, sourced from the client sheet. */
+  /** Chain style family (e.g. "Classic Chains", "Hollow Chains") - Chain-only, sourced from the client sheet. */
   chainType?: string;
-  /** The sheet's own web reference code ("WEB Sayfası Katalog Ürün Kodu"), e.g. "AF Chain 1" — Chain-only. */
+  /** The sheet's own web reference code ("WEB Sayfası Katalog Ürün Kodu"), e.g. "AF Chain 1" - Chain-only. */
   webCode?: string;
 
-  /** e.g. "chain1", "bracelet3" — used to build image file names. */
+  /** e.g. "chain1", "bracelet3" - used to build image file names. */
   imgSlug: string;
 
-  /** Short descriptive blurb — currently only populated for Fine Jewelry (8K) items. */
+  /** Short descriptive blurb - currently only populated for Fine Jewelry (8K) items. */
   description?: string;
 
   // Ring-only
   setting?: string;
   size?: string;
 
-  // Fine Jewelry (8K Gold Collection)-only — sourced from the client product list
-  /** Broad parent grouping (e.g. "Bracelets", "Diamonds & Gemstones") — 13 values, used as the primary filter. */
+  // Fine Jewelry (8K Gold Collection)-only - sourced from the client product list
+  /** Broad parent grouping (e.g. "Bracelets", "Diamonds & Gemstones") - 13 values, used as the primary filter. */
   fineCategory?: string;
-  /** Specific sub-category from the source sheet (e.g. "Men's Bracelets") — 51 values, secondary filter. */
+  /** Specific sub-category from the source sheet (e.g. "Men's Bracelets") - 51 values, secondary filter. */
   fineSubCategory?: string;
   difficulty?: string;
   /** Craftsmanship tier derived from difficulty: 1 (Very Easy) – 6 (Very Difficult). Higher = harder. */

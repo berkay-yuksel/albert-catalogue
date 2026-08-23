@@ -46,7 +46,7 @@ export function Sidebar({
   }
 
   // Reset which facets start collapsed whenever the category changes (each
-  // category has its own config/defaults) — adjusted during render rather
+  // category has its own config/defaults) - adjusted during render rather
   // than in an effect, see https://react.dev/learn/you-might-not-need-an-effect
   const [prevCategory, setPrevCategory] = useState(activeCategory);
   const [collapsed, setCollapsed] = useState<Set<string>>(() => defaultCollapsedSet(config));

@@ -21,17 +21,17 @@ function buildProducts(): Product[] {
   const products: Product[] = [];
   let uid = 1;
 
-  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. Name, chain
+  // Chain: real catalog data (330 SKUs) - see data/chainData.ts. Name, chain
   // type, workmanship difficulty, catalog code, thickness, and weight all
   // come straight from the client sheet. Karat is demo-assigned (round-robin
-  // across the standard karats) since the sheet doesn't specify it per SKU —
+  // across the standard karats) since the sheet doesn't specify it per SKU;
   // it exists so buyers have a familiar gold-purity filter to narrow by.
-  // Color/Clasp/Stone stay "—" since there's no real data for those either.
+  // Color/Clasp/Stone stay "N/A" since there's no real data for those either.
   CHAIN_ITEMS.forEach((item, i) => {
     products.push({
       id: uid++, category: "Chain", name: item.name,
       chainType: item.chainType, difficulty: item.difficulty, sku: item.sku, webCode: item.webCode,
-      karat: pick(KARATS, i), color: "—", mfg: "—", finish: "—", clasp: "—", stone: "—",
+      karat: pick(KARATS, i), color: "N/A", mfg: "N/A", finish: "N/A", clasp: "N/A", stone: "N/A",
       width: item.thickness, length: 50,
       weight: item.weight, stock: "In Stock",
       price: 0, imgSlug: "",
@@ -53,7 +53,7 @@ function buildProducts(): Product[] {
     products.push({
       id: uid++, category: "Ring", name: t,
       karat: pick(KARATS, i + 2), color: pick(COLORS, i + 1), mfg: pick(RING_MFG, i),
-      finish: pick(RING_FINISH, i), clasp: "—", stone: pick(STONE_TYPES, i + 1),
+      finish: pick(RING_FINISH, i), clasp: "N/A", stone: pick(STONE_TYPES, i + 1),
       setting: pick(RING_SETTINGS, i), size: pick(RING_SIZES, i),
       width: 0, length: 0, weight: +(1.5 + ((i * 0.8) % 6)).toFixed(1), stock: pick(STOCK, i % 2),
       price: 0, imgSlug: "",
@@ -81,7 +81,7 @@ function buildProducts(): Product[] {
       fineSubCategory: item.subCategory,
       difficulty: item.difficulty, tier, tierLabel: tierLabel(tier), popularity: item.popularity,
       karat: "8K (333)", color, mfg: pick(K8_MFG, i),
-      finish, clasp: "—",
+      finish, clasp: "N/A",
       stone: pick(STONE_TYPES, i),
       width: pick(CHAIN_WIDTHS, i), length: pick(CHAIN_LENGTHS, i),
       weight: +(2 + ((i * 1.7) % 16)).toFixed(1), stock: pick(STOCK, i % 2),
@@ -100,7 +100,7 @@ function buildProducts(): Product[] {
       id: uid++, category: "Tobacco Pipe", name: mat + " " + shape + " Pipe",
       material: mat, shape: shape, filter: pick(PIPE_FILTER, i), bowl: pick(PIPE_BOWL, i),
       stem: pick(PIPE_STEM, i), finish: pick(PIPE_FINISH, i),
-      karat: "—", color: "—", mfg: "—", clasp: "—", stone: "—",
+      karat: "N/A", color: "N/A", mfg: "N/A", clasp: "N/A", stone: "N/A",
       width: 0, length: 0, weight: +(30 + ((i * 11) % 40)).toFixed(0), stock: pick(STOCK, i % 2),
       price: 0, imgSlug: "",
     });
@@ -121,7 +121,7 @@ function computePrice(p: Product): number {
   if (p.category === "Tobacco Pipe") {
     return Math.round(35 + p.weight * 0.9);
   }
-  // Fine Jewelry (8K Gold Collection) is priced on request, not listed — see OrderPanel's
+  // Fine Jewelry (8K Gold Collection) is priced on request, not listed - see OrderPanel's
   // "Contact for Pricing" handling for carts made up entirely of these items.
   if (p.category === "8K Gold Collection") {
     return 0;
