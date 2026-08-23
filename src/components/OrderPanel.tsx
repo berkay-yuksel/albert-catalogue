@@ -132,6 +132,7 @@ export function OrderPanel({
   const [notes, setNotes] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
   const [mailtoWarning, setMailtoWarning] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ids = Object.keys(cart.items);
   const totalWeight = cart.totalWeight(products);
@@ -139,9 +140,18 @@ export function OrderPanel({
   const isFreeOrder = ids.length > 0 && totalPrice === 0;
   const attachmentNames = attachments.map((f) => f.name);
 
-  function addFiles(files: FileList | null) {
+  function addFiles(files: FileList | File[] | null) {
     if (!files) return;
-    setAttachments((prev) => [...prev, ...Array.from(files)]);
+    const incoming = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (incoming.length === 0) return;
+    setAttachments((prev) => {
+      // Skip exact duplicates (same name+size+lastModified) so re-selecting
+      // or re-dropping the same photo doesn't silently add a second copy
+      // that looks identical — which was confusing ("doesn't update").
+      const isDupe = (a: File, b: File) => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified;
+      const fresh = incoming.filter((f) => !prev.some((p) => isDupe(p, f)));
+      return [...prev, ...fresh];
+    });
   }
 
   function removeAttachment(index: number) {
@@ -153,6 +163,12 @@ export function OrderPanel({
     setNotes("");
     setAttachments([]);
     setMailtoWarning(false);
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(false);
+    addFiles(e.dataTransfer.files);
   }
 
   // Local preview URLs for the attached photos (revoked on change/unmount to
@@ -249,20 +265,33 @@ export function OrderPanel({
             />
 
             <div className="order-extras-label">Reference Photos</div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              className="order-file-input"
-              onChange={(e) => {
-                addFiles(e.target.files);
-                e.target.value = "";
+            <div
+              className={`order-dropzone ${isDragging ? "dragging" : ""}`}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
               }}
-            />
-            <button className="add-photos-btn" onClick={() => fileInputRef.current?.click()}>
-              + Add Photos
-            </button>
+              onDragLeave={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+              }}
+              onDrop={handleDrop}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="order-file-input"
+                onChange={(e) => {
+                  addFiles(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <span className="order-dropzone-icon">⇧</span>
+              <span className="order-dropzone-text">Drag &amp; drop photos here, or click to browse</span>
+            </div>
             {attachments.length > 0 && (
               <div className="order-attachments">
                 {attachments.map((file, i) => (
