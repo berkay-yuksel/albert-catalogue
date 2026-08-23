@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
@@ -155,6 +155,13 @@ export function OrderPanel({
     setMailtoWarning(false);
   }
 
+  // Local preview URLs for the attached photos (revoked on change/unmount to
+  // avoid leaking memory — object URLs otherwise persist for the page's life).
+  const previewUrls = useMemo(() => attachments.map((f) => URL.createObjectURL(f)), [attachments]);
+  useEffect(() => {
+    return () => previewUrls.forEach((url) => URL.revokeObjectURL(url));
+  }, [previewUrls]);
+
   // Most mail clients (Outlook desktop especially) silently truncate mailto:
   // links beyond ~2000 characters — and since our message/photos section is
   // appended near the end, it's the first thing to get cut off on large
@@ -257,16 +264,17 @@ export function OrderPanel({
               + Add Photos
             </button>
             {attachments.length > 0 && (
-              <ul className="order-attachments">
+              <div className="order-attachments">
                 {attachments.map((file, i) => (
-                  <li key={`${file.name}-${i}`}>
-                    <span className="order-attachment-name">{file.name}</span>
-                    <button onClick={() => removeAttachment(i)} aria-label="Remove photo">
+                  <div className="order-attachment-thumb" key={`${file.name}-${i}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element -- local blob: preview, next/image can't handle object URLs */}
+                    <img src={previewUrls[i]} alt={file.name} />
+                    <button onClick={() => removeAttachment(i)} aria-label={`Remove ${file.name}`}>
                       ✕
                     </button>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
             {attachments.length > 0 && (
               <p className="order-attachments-note">
