@@ -22,12 +22,6 @@ export function FineJewelryRow({
       </td>
       <td>
         <div className="row-name">{product.name}</div>
-        {product.popularity !== undefined && (
-          <span className="row-stars" title={`${product.popularity}/5 US market demand`}>
-            {"★".repeat(product.popularity)}
-            {"☆".repeat(5 - product.popularity)}
-          </span>
-        )}
       </td>
       <td className="row-cat">{product.fineSubCategory ?? "—"}</td>
       <td className="row-desc">

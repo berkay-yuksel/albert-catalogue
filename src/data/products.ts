@@ -21,16 +21,17 @@ function buildProducts(): Product[] {
   const products: Product[] = [];
   let uid = 1;
 
-  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. Only fields
-  // actually present in the client sheet are used (name, chain type, workmanship
-  // difficulty, catalog code, thickness, weight). Karat/Color/Clasp/Stone aren't
-  // in the sheet, so — like Tobacco Pipe — they're set to "—" rather than
-  // demo-assigned. Length isn't in the sheet either; fixed at 50cm per instruction.
-  CHAIN_ITEMS.forEach((item) => {
+  // Chain: real catalog data (330 SKUs) — see data/chainData.ts. Name, chain
+  // type, workmanship difficulty, catalog code, thickness, and weight all
+  // come straight from the client sheet. Karat is demo-assigned (round-robin
+  // across the standard karats) since the sheet doesn't specify it per SKU —
+  // it exists so buyers have a familiar gold-purity filter to narrow by.
+  // Color/Clasp/Stone stay "—" since there's no real data for those either.
+  CHAIN_ITEMS.forEach((item, i) => {
     products.push({
       id: uid++, category: "Chain", name: item.name,
       chainType: item.chainType, difficulty: item.difficulty, sku: item.sku, webCode: item.webCode,
-      karat: "—", color: "—", mfg: "—", finish: "—", clasp: "—", stone: "—",
+      karat: pick(KARATS, i), color: "—", mfg: "—", finish: "—", clasp: "—", stone: "—",
       width: item.thickness, length: 50,
       weight: item.weight, stock: "In Stock",
       price: 0, imgSlug: "",

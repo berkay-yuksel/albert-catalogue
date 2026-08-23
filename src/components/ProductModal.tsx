@@ -76,9 +76,6 @@ export function ProductModal({
         <div className="modal-body">
           <div className="modal-cat">{CAT_LABELS[product.category]}</div>
           <div className="modal-title">{product.name}</div>
-          <span className={`stock-dot modal-stock ${product.stock === "In Stock" ? "instock" : "order"}`}>
-            {product.stock === "In Stock" ? "In Stock" : "Made to Order"}
-          </span>
           <div className="modal-specs">
             {specs.map((f) => (
               <div className="spec-row" key={f.key}>

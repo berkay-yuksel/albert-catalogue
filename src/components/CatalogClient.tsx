@@ -181,6 +181,9 @@ export function CatalogClient({ products }: { products: Product[] }) {
                       <th className="sortable" onClick={() => handleHeaderClick("sku")}>
                         Product Code {sortArrow("sku")}
                       </th>
+                      <th className="sortable" onClick={() => handleHeaderClick("karat")}>
+                        Karat {sortArrow("karat")}
+                      </th>
                       <th className="sortable" onClick={() => handleHeaderClick("width")}>
                         Thickness {sortArrow("width")}
                       </th>
@@ -191,7 +194,6 @@ export function CatalogClient({ products }: { products: Product[] }) {
                       <th className="sortable" onClick={() => handleHeaderClick("price")}>
                         Price {sortArrow("price")}
                       </th>
-                      <th>Stock</th>
                       <th></th>
                     </tr>
                   </thead>

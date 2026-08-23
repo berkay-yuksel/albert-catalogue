@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export function Topbar() {
   return (
     <div className="topbar">
@@ -10,6 +12,10 @@ export function Topbar() {
           <span>B2B Wholesale Catalog · Chains · Jewelry · Pipes</span>
         </div>
       </div>
+      <nav className="topbar-pages">
+        <Link href="/about">About</Link>
+        <Link href="/contact">Contact</Link>
+      </nav>
     </div>
   );
 }

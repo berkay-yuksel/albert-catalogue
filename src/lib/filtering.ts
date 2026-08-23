@@ -1,6 +1,7 @@
 import type {
   Product, FacetConfig, FacetSelections, Ranges, SortValue, Category,
 } from "./types";
+import { KARAT_RANK } from "@/data/options";
 
 /** Builds an empty selection state (all unchecked / no range) for a given facet config. */
 export function buildEmptyFacetState(config: FacetConfig[]): {
@@ -75,6 +76,8 @@ export function sortProducts(list: Product[], sort: SortValue): Product[] {
         return mul * (a.chainType ?? "").localeCompare(b.chainType ?? "");
       case "tier":
         return mul * ((a.tier ?? 0) - (b.tier ?? 0));
+      case "karat":
+        return mul * ((KARAT_RANK[a.karat] ?? 0) - (KARAT_RANK[b.karat] ?? 0));
       default:
         return 0;
     }

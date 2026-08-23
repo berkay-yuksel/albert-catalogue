@@ -3,7 +3,8 @@
 import { useState } from "react";
 import type { Category, FacetConfig, FacetSelections, Product, Ranges } from "@/lib/types";
 import { PRODUCTS } from "@/data/products";
-import { CATEGORY_FACETS, CAT_LABELS } from "@/data/facets";
+import { CATEGORY_FACETS, CAT_LABELS_SHORT, FINE_JEWELRY_CATEGORY } from "@/data/facets";
+import { FINE_JEWELRY_PARENT_CATEGORIES, PARENT_TO_SUB_CATEGORIES } from "@/data/fineJewelryData";
 
 /** Checkbox facets longer than this show a truncated list + "Show All" toggle. */
 const VISIBLE_LIMIT = 8;
@@ -50,10 +51,12 @@ export function Sidebar({
   const [prevCategory, setPrevCategory] = useState(activeCategory);
   const [collapsed, setCollapsed] = useState<Set<string>>(() => defaultCollapsedSet(config));
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
+  const [expandedParents, setExpandedParents] = useState<Set<string>>(() => new Set());
   if (activeCategory !== prevCategory) {
     setPrevCategory(activeCategory);
     setCollapsed(defaultCollapsedSet(config));
     setExpanded(new Set());
+    setExpandedParents(new Set());
   }
 
   function toggleCollapsed(key: string) {
@@ -74,6 +77,15 @@ export function Sidebar({
     });
   }
 
+  function toggleParent(parent: string) {
+    setExpandedParents((prev) => {
+      const next = new Set(prev);
+      if (next.has(parent)) next.delete(parent);
+      else next.add(parent);
+      return next;
+    });
+  }
+
   return (
     <>
       <div className={`overlay ${open ? "open" : ""}`} onClick={onCloseMobile} />
@@ -81,17 +93,60 @@ export function Sidebar({
         <div className="sidebar-head">
           <div>
             <h2>Filters</h2>
-            <span className="sub">{CAT_LABELS[activeCategory]}</span>
+            <span className="sub">{CAT_LABELS_SHORT[activeCategory]}</span>
           </div>
           <button className="clear-btn" onClick={onClear}>
             Clear
           </button>
         </div>
         <div>
-          {config.length === 0 ? (
+          {config.length === 0 && activeCategory !== FINE_JEWELRY_CATEGORY ? (
             <p className="no-filters">No filters available for this category.</p>
           ) : (
-            config.map((f) => {
+            <>
+              {activeCategory === FINE_JEWELRY_CATEGORY && (
+                <div className="facet">
+                  <div className="facet-title" style={{ cursor: "default" }}>
+                    <span>Category</span>
+                  </div>
+                  <div className="facet-body category-tree">
+                    {FINE_JEWELRY_PARENT_CATEGORIES.map((parent) => {
+                      const subs = PARENT_TO_SUB_CATEGORIES[parent] ?? [];
+                      const parentCount = scoped.filter((p) => p.fineCategory === parent).length;
+                      const isOpen = expandedParents.has(parent);
+                      return (
+                        <div className="category-node" key={parent}>
+                          <div className="category-node-head" onClick={() => toggleParent(parent)}>
+                            <span className={`tree-chevron ${isOpen ? "open" : ""}`}>▸</span>
+                            <span className="category-node-label">{parent}</span>
+                            <span className="count">{parentCount}</span>
+                          </div>
+                          {isOpen && (
+                            <div className="category-node-children">
+                              {subs.map((sub) => {
+                                const subCount = scoped.filter((p) => p.fineSubCategory === sub).length;
+                                const checked = facetSelections["fineSubCategory"]?.has(sub) ?? false;
+                                return (
+                                  <label className="facet-option" key={sub}>
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={(e) => onToggleValue("fineSubCategory", sub, e.target.checked)}
+                                    />
+                                    <span>{sub}</span>
+                                    <span className="count">{subCount}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {config.map((f) => {
               const isCollapsed = collapsed.has(f.key);
               if (f.type === "checkbox" && f.values) {
                 const counts = valueCounts(scoped, f.key, f.values);
@@ -158,7 +213,8 @@ export function Sidebar({
                   </div>
                 </div>
               );
-            })
+              })}
+            </>
           )}
         </div>
       </aside>

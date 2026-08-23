@@ -286,3 +286,11 @@ export function tierLabel(tier: number): string {
 /** Letter tiers in best-to-worst order, for the filter list and any fixed ordering. */
 export const TIER_LABELS: string[] = [6, 5, 4, 3, 2, 1].map(tierLabel);
 
+/** Parent category -> its specific sub-categories, derived from SUB_CATEGORY_TO_PARENT.
+ *  Used to render the nested Category → Sub Category tree in the sidebar. */
+export const PARENT_TO_SUB_CATEGORIES: Record<string, string[]> = {};
+for (const sub of FINE_JEWELRY_SUB_CATEGORIES) {
+  const parent = SUB_CATEGORY_TO_PARENT[sub];
+  (PARENT_TO_SUB_CATEGORIES[parent] ??= []).push(sub);
+}
+

@@ -15,8 +15,9 @@ export const SORT_OPTIONS: SortOption[] = [
   { value: "id-asc", label: "Oldest First" },
 ];
 
-/** Chain also sorts by Thickness/Weight/Product Code, since the client sheet
- *  gives a real per-SKU gauge, weight, and catalog code. */
+/** Chain also sorts by Thickness/Weight/Product Code/Karat, since the client
+ *  sheet gives a real per-SKU gauge, weight, and catalog code (Karat is
+ *  demo-assigned but still a familiar sort dimension for gold buyers). */
 const CHAIN_SORT_OPTIONS: SortOption[] = [
   { value: "width-asc", label: "Thickness (Low → High)" },
   { value: "width-desc", label: "Thickness (High → Low)" },
@@ -24,6 +25,8 @@ const CHAIN_SORT_OPTIONS: SortOption[] = [
   { value: "weight-desc", label: "Weight (High → Low)" },
   { value: "sku-asc", label: "Product Code (A → Z)" },
   { value: "sku-desc", label: "Product Code (Z → A)" },
+  { value: "karat-desc", label: "Karat (High → Low)" },
+  { value: "karat-asc", label: "Karat (Low → High)" },
 ];
 
 /** Fine Jewelry also sorts by Tier (craftsmanship difficulty, S → F). */

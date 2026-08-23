@@ -99,7 +99,7 @@ export type FacetSelections = Record<string, Set<string>>;
 /** facet key -> selected numeric range */
 export type Ranges = Record<string, NumericRange>;
 
-export type SortKey = "name" | "price" | "id" | "width" | "weight" | "sku" | "chainType" | "tier";
+export type SortKey = "name" | "price" | "id" | "width" | "weight" | "sku" | "chainType" | "tier" | "karat";
 export type SortDir = "asc" | "desc";
 /** Combined sort value as used by the <select>, e.g. "name-asc". */
 export type SortValue = `${SortKey}-${SortDir}`;

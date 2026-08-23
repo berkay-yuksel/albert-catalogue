@@ -28,8 +28,32 @@ function totals(items: Record<number, number>, products: Product[]) {
   return { itemCount, totalPrice };
 }
 
+export interface OrderExtras {
+  /** Free-text message/instructions the buyer typed in the order panel. */
+  notes?: string;
+  /** Filenames of reference photos attached in the order panel. Neither a
+   *  mailto: link nor the clipboard can carry actual image bytes, so these
+   *  are listed as a reminder for the buyer to attach manually. */
+  attachmentNames?: string[];
+}
+
+function extrasLines(extras?: OrderExtras): string[] {
+  const lines: string[] = [];
+  if (extras?.notes?.trim()) {
+    lines.push("", "Message:", extras.notes.trim());
+  }
+  if (extras?.attachmentNames && extras.attachmentNames.length > 0) {
+    lines.push(
+      "",
+      `Reference photos (${extras.attachmentNames.length}) — please attach manually:`,
+      ...extras.attachmentNames.map((n) => `- ${n}`)
+    );
+  }
+  return lines;
+}
+
 /** Plain-text order summary, used for the "Copy Order" clipboard action. */
-export function buildOrderText(items: Record<number, number>, products: Product[]): string {
+export function buildOrderText(items: Record<number, number>, products: Product[], extras?: OrderExtras): string {
   const { itemCount, totalPrice } = totals(items, products);
   const lines = itemLines(items, products);
   const isFreeOrder = itemCount > 0 && totalPrice === 0;
@@ -40,6 +64,7 @@ export function buildOrderText(items: Record<number, number>, products: Product[
     "",
     `Total: ${isFreeOrder ? "Contact for Pricing" : fmtPrice(totalPrice)}`,
     ...(isFreeOrder ? ["", "Note: these items don't have a listed price — please contact us directly for a quote."] : []),
+    ...extrasLines(extras),
     "",
     "Delivery Country:",
     "Preferred Karat/Color (if different per item):",
@@ -47,7 +72,7 @@ export function buildOrderText(items: Record<number, number>, products: Product[
 }
 
 /** mailto: link version — same content, URL-encoded with a subject line. */
-export function buildOrderMailto(items: Record<number, number>, products: Product[]): string {
+export function buildOrderMailto(items: Record<number, number>, products: Product[], extras?: OrderExtras): string {
   const { itemCount, totalPrice } = totals(items, products);
   const lines = itemLines(items, products);
   const isFreeOrder = itemCount > 0 && totalPrice === 0;
@@ -56,9 +81,22 @@ export function buildOrderMailto(items: Record<number, number>, products: Produc
     : `Total: ${fmtPrice(totalPrice)}`;
 
   const subject = encodeURIComponent(`Wholesale Order Request – ${itemCount} item(s)`);
-  const body = encodeURIComponent(
-    `Hello,\n\nI would like to place a wholesale order for the following items:\n\n${lines}\n\n${totalLine}\n\nDelivery Country:\nPreferred Karat/Color (if different per item):\n\nThank you.`
-  );
+  const bodyLines = [
+    "Hello,",
+    "",
+    "I would like to place a wholesale order for the following items:",
+    "",
+    lines,
+    "",
+    totalLine,
+    ...extrasLines(extras),
+    "",
+    "Delivery Country:",
+    "Preferred Karat/Color (if different per item):",
+    "",
+    "Thank you.",
+  ];
+  const body = encodeURIComponent(bodyLines.join("\n"));
 
   return `mailto:${ORDER_EMAIL}?subject=${subject}&body=${body}`;
 }

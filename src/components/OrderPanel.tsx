@@ -6,7 +6,6 @@ import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 import { buildOrderMailto, buildOrderText } from "@/lib/mailto";
 import type { OrderCartApi } from "@/lib/useOrderCart";
-import { ProductImage } from "./ProductImage";
 
 export function OrderFab({
   cart,
@@ -73,7 +72,6 @@ function OrderItemRow({
 
   return (
     <div className="order-item">
-      <div className="order-item-swatch">{product && <ProductImage product={product} variant={1} />}</div>
       <div className="order-item-info">
         <div className="order-item-name">{product ? product.name : "Unknown item"}</div>
         <div className="order-item-cat">
@@ -131,22 +129,57 @@ export function OrderPanel({
   onClose: () => void;
 }) {
   const [copied, setCopied] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [mailtoWarning, setMailtoWarning] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const ids = Object.keys(cart.items);
   const totalWeight = cart.totalWeight(products);
   const totalPrice = cart.totalPrice(products);
   const isFreeOrder = ids.length > 0 && totalPrice === 0;
+  const attachmentNames = attachments.map((f) => f.name);
+
+  function addFiles(files: FileList | null) {
+    if (!files) return;
+    setAttachments((prev) => [...prev, ...Array.from(files)]);
+  }
+
+  function removeAttachment(index: number) {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function clearAll() {
+    cart.clear();
+    setNotes("");
+    setAttachments([]);
+    setMailtoWarning(false);
+  }
+
+  // Most mail clients (Outlook desktop especially) silently truncate mailto:
+  // links beyond ~2000 characters — and since our message/photos section is
+  // appended near the end, it's the first thing to get cut off on large
+  // orders. Warn and steer toward "Copy Order" (no length limit) instead of
+  // silently sending an incomplete email.
+  const MAILTO_SAFE_LENGTH = 1800;
 
   function sendOrder() {
     if (ids.length === 0) return;
-    window.location.href = buildOrderMailto(cart.items, products);
+    const mailto = buildOrderMailto(cart.items, products, { notes, attachmentNames });
+    if (mailto.length > MAILTO_SAFE_LENGTH) {
+      setMailtoWarning(true);
+      return;
+    }
+    setMailtoWarning(false);
+    window.location.href = mailto;
   }
 
   async function copyOrder() {
     if (ids.length === 0) return;
-    const text = buildOrderText(cart.items, products);
+    const text = buildOrderText(cart.items, products, { notes, attachmentNames });
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      setMailtoWarning(false);
       setTimeout(() => setCopied(false), 1800);
     } catch {
       // Clipboard API unavailable/denied — fail silently, the person can still use "Send Order Request".
@@ -191,6 +224,58 @@ export function OrderPanel({
             })
           )}
         </div>
+        {/* Deliberately OUTSIDE the scrollable .order-items list — always
+            visible near the bottom instead of requiring a scroll past the
+            item rows to find it. */}
+        {ids.length > 0 && (
+          <div className="order-extras">
+            <label className="order-extras-label" htmlFor="order-notes">
+              Message / Special Instructions
+            </label>
+            <textarea
+              id="order-notes"
+              className="order-notes-input"
+              placeholder="e.g. preferred karat, delivery timeline, custom requests..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+            />
+
+            <div className="order-extras-label">Reference Photos</div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="order-file-input"
+              onChange={(e) => {
+                addFiles(e.target.files);
+                e.target.value = "";
+              }}
+            />
+            <button className="add-photos-btn" onClick={() => fileInputRef.current?.click()}>
+              + Add Photos
+            </button>
+            {attachments.length > 0 && (
+              <ul className="order-attachments">
+                {attachments.map((file, i) => (
+                  <li key={`${file.name}-${i}`}>
+                    <span className="order-attachment-name">{file.name}</span>
+                    <button onClick={() => removeAttachment(i)} aria-label="Remove photo">
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {attachments.length > 0 && (
+              <p className="order-attachments-note">
+                Photos can&apos;t be attached automatically to Copy/Email — their filenames will
+                be listed so you remember to attach them manually.
+              </p>
+            )}
+          </div>
+        )}
         <div className="order-panel-foot">
           <div className="order-summary">
             <span>Items</span>
@@ -209,8 +294,14 @@ export function OrderPanel({
               These items don&apos;t have a listed price — please contact us directly for a quote.
             </div>
           )}
+          {mailtoWarning && (
+            <div className="order-contact-notice">
+              This order is too large for email to include everything (some mail clients cut off
+              long links). Please use <b>Copy Order</b> instead and paste it into your email.
+            </div>
+          )}
           <div className="order-panel-actions">
-            <button className="btn-secondary" onClick={cart.clear}>
+            <button className="btn-secondary" onClick={clearAll}>
               Clear
             </button>
             <button className="btn-secondary" onClick={copyOrder}>
