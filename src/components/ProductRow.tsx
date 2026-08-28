@@ -24,7 +24,7 @@ export function ProductRow({
       <td>
         <div className="row-name">{product.name}</div>
       </td>
-      <td className="row-cat">{product.chainType ?? CAT_LABELS[product.category]}</td>
+      <td className="row-cat">{product.chainType ?? product.material ?? CAT_LABELS[product.category]}</td>
       <td className="mono">{product.sku ?? "N/A"}</td>
       <td className="mono">{product.karat && product.karat !== "N/A" ? product.karat : "N/A"}</td>
       <td className="mono">{product.width ? product.width + " mm" : "N/A"}</td>

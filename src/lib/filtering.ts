@@ -39,7 +39,8 @@ export function applyFilters(
       const set = facetSelections[key];
       if (!set || set.size === 0) continue;
       const v = p[key as keyof Product];
-      if (typeof v !== "string" || !set.has(v)) return false;
+      const matches = Array.isArray(v) ? v.some((x) => set.has(x)) : typeof v === "string" && set.has(v);
+      if (!matches) return false;
     }
 
     for (const key in ranges) {

@@ -6,11 +6,11 @@ import {
   RING_TYPES, RING_SIZES, RING_SETTINGS, RING_MFG, RING_FINISH,
   NECKLACE_TYPES, NECKLACE_LENGTHS, NECKLACE_MFG,
   K8_MFG,
-  PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
   pick,
 } from "./options";
 import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT, TIER_BY_DIFFICULTY, tierLabel } from "./fineJewelryData";
 import { CHAIN_ITEMS } from "./chainData";
+import { PIPE_ITEMS } from "./pipeData";
 
 /* ============================================================
    DEMO PRODUCT GENERATION
@@ -23,15 +23,15 @@ function buildProducts(): Product[] {
 
   // Chain: real catalog data (330 SKUs) - see data/chainData.ts. Name, chain
   // type, workmanship difficulty, catalog code, thickness, and weight all
-  // come straight from the client sheet. Karat is demo-assigned (round-robin
-  // across the standard karats) since the sheet doesn't specify it per SKU;
-  // it exists so buyers have a familiar gold-purity filter to narrow by.
+  // come straight from the client sheet. Karat is fixed at 14K across the
+  // board (the sheet doesn't specify per-SKU karat, and 14K is the standard
+  // wholesale reference purity used for pricing, see computePrice below).
   // Color/Clasp/Stone stay "N/A" since there's no real data for those either.
-  CHAIN_ITEMS.forEach((item, i) => {
+  CHAIN_ITEMS.forEach((item) => {
     products.push({
       id: uid++, category: "Chain", name: item.name,
       chainType: item.chainType, difficulty: item.difficulty, sku: item.sku, webCode: item.webCode,
-      karat: pick(KARATS, i), color: "N/A", mfg: "N/A", finish: "N/A", clasp: "N/A", stone: "N/A",
+      karat: "14K", color: "N/A", mfg: "N/A", finish: "N/A", clasp: "N/A", stone: "N/A",
       width: item.thickness, length: 50,
       weight: item.weight, stock: "In Stock",
       price: 0, imgSlug: "",
@@ -90,18 +90,17 @@ function buildProducts(): Product[] {
     });
   });
 
-  const pipeCombos: Array<[string, string]> = [
-    ["Meerschaum", "Billiard"], ["Meerschaum", "Bent"], ["Briar Wood", "Apple"],
-    ["Briar Wood", "Dublin"], ["Olive Wood", "Canadian"], ["Morta (Bog Oak)", "Bulldog"],
-    ["Corn Cob", "Poker"], ["Briar Wood", "Billiard"],
-  ];
-  pipeCombos.forEach(([mat, shape], i) => {
+  // Tobacco Pipe: real catalog data (8 handmade pipes) - see data/pipeData.ts.
+  // Weight isn't in the client data, so it's a reasonable placeholder based on
+  // typical meerschaum/wood pipe weights (30-70g) until real figures are given.
+  PIPE_ITEMS.forEach((item, i) => {
     products.push({
-      id: uid++, category: "Tobacco Pipe", name: mat + " " + shape + " Pipe",
-      material: mat, shape: shape, filter: pick(PIPE_FILTER, i), bowl: pick(PIPE_BOWL, i),
-      stem: pick(PIPE_STEM, i), finish: pick(PIPE_FINISH, i),
+      id: uid++, category: "Tobacco Pipe", name: item.name,
+      pipeImage: item.image, pipeZoomImage: item.zoomImage,
+      material: item.material, pipeShape: item.shape, carvingStyle: item.carvingStyle,
+      theme: item.theme, stemColor: item.stemColor, finish: item.finish, handmade: item.handmade,
       karat: "N/A", color: "N/A", mfg: "N/A", clasp: "N/A", stone: "N/A",
-      width: 0, length: 0, weight: +(30 + ((i * 11) % 40)).toFixed(0), stock: pick(STOCK, i % 2),
+      width: 0, length: 0, weight: +(30 + ((i * 11) % 40)).toFixed(0), stock: "In Stock",
       price: 0, imgSlug: "",
     });
   });
@@ -111,11 +110,39 @@ function buildProducts(): Product[] {
 
 /* ============================================================
    PRICING (USD)
+   ============================================================
+   Chain pricing is grounded in actual 14K gold wholesale market research
+   (see chain-wholesale-pricing-methodology.md for full sourcing):
+
+   - 14K melt value: $85.00/g. Multiple independent live-pricing sources
+     (goldpricez.com, goldzenn.com, meltvalue.com, mygoldcalc.com) put 14K
+     gold (58.3% pure) between $82-86.60/g as of Aug 2026; $85/g is the
+     midpoint reference rate used here.
+   - Manufacturer/wholesale markup over melt: industry sources (Apples of
+     Gold, YINCITY Gold, Ott Family Jewelry) consistently describe direct
+     manufacturer/wholesale markups in the 25-55% range over melt, well
+     below the 100-200%+ markups seen at retail. The gap scales with labor
+     complexity, so each chain's Workmanship Difficulty tier (from the
+     client sheet) maps to a markup within that band: machine-made
+     "Low" difficulty chains sit near the low end, hand-assembled
+     "Very High" (Bismark/King/Boutique) pieces near the high end, since
+     they require far more labor per gram of gold used.
    ============================================================ */
+const GOLD_14K_MELT_PER_GRAM = 85; // USD/g, 14K (58.3% pure) - see methodology doc for sources
+
+/** Wholesale markup over 14K melt value, by workmanship difficulty tier. */
+const CHAIN_MARKUP_BY_DIFFICULTY: Record<string, number> = {
+  "Low (Machine / Standard)": 1.28,
+  "Medium (No Appliqué / Custom Shaving)": 1.35,
+  "High (Hollow / Woven)": 1.45,
+  "Very High (Bismark / King / Boutique)": 1.55,
+};
+const DEFAULT_CHAIN_MARKUP = 1.35; // fallback if a difficulty label isn't in the table above
+
 const KARAT_PURITY: Record<string, number> = {
   "8K (333)": 0.333, "10K": 0.417, "14K": 0.585, "18K": 0.75, "22K": 0.916, "24K": 0.999,
 };
-const GOLD_PRICE_PER_GRAM = 85; // USD, spot approximation used for demo pricing
+const GOLD_PRICE_PER_GRAM = 85; // USD - used only for the hidden demo categories (Bracelet/Ring/Necklace)
 
 function computePrice(p: Product): number {
   if (p.category === "Tobacco Pipe") {
@@ -125,6 +152,10 @@ function computePrice(p: Product): number {
   // "Contact for Pricing" handling for carts made up entirely of these items.
   if (p.category === "8K Gold Collection") {
     return 0;
+  }
+  if (p.category === "Chain") {
+    const markup = CHAIN_MARKUP_BY_DIFFICULTY[p.difficulty ?? ""] ?? DEFAULT_CHAIN_MARKUP;
+    return Math.max(15, Math.round(p.weight * GOLD_14K_MELT_PER_GRAM * markup));
   }
   const purity = KARAT_PURITY[p.karat] || 0.75;
   const raw = p.weight * purity * GOLD_PRICE_PER_GRAM * 1.18; // + workmanship markup

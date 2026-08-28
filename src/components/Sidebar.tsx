@@ -13,7 +13,11 @@ function valueCounts(products: Product[], key: keyof Product, values: string[]) 
   const counts = Object.fromEntries(values.map((v) => [v, 0])) as Record<string, number>;
   products.forEach((p) => {
     const v = p[key];
-    if (typeof v === "string" && v in counts) counts[v]++;
+    if (Array.isArray(v)) {
+      v.forEach((x) => { if (typeof x === "string" && x in counts) counts[x]++; });
+    } else if (typeof v === "string" && v in counts) {
+      counts[v]++;
+    }
   });
   return counts;
 }

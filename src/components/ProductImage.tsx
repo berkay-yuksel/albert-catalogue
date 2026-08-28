@@ -14,6 +14,12 @@ import { FINE_JEWELRY_CATEGORY_IMAGES } from "@/data/fineJewelryData";
      /images/{sku}-zoom.png   -> zoom/detail photo (optional)
    e.g. /images/0322-KNG-120.png, /images/0322-KNG-120-zoom.png
 
+   Tobacco Pipe products carry their exact photo filenames directly on the
+   product (product.pipeImage / pipeZoomImage, from the client's pipe data),
+   served from /public/pipeimages/. Checked before the Chain sku-based rule
+   below since pipes also have a `sku` (e.g. "PIPE-001") for display, but
+   that's not what names their photo files.
+
    Fine Jewelry (8K Gold Collection) products don't have individual photos ,
    every product under a given parent category (product.fineCategory) shares
    one illustration from /public/catimages, see FINE_JEWELRY_CATEGORY_IMAGES.
@@ -22,10 +28,10 @@ import { FINE_JEWELRY_CATEGORY_IMAGES } from "@/data/fineJewelryData";
      /images/{imgSlug}a.jpg  -> main / standard photo (required)
      /images/{imgSlug}b.jpg  -> optional angle photo
      /images/{imgSlug}c.jpg  -> optional zoom/detail photo
-   e.g. /images/pipe1a.jpg, pipe1b.jpg, pipe1c.jpg
    ============================================================ */
 const IMAGE_BASE_PATH = "/images/";
 const CATEGORY_IMAGE_BASE_PATH = "/catimages/";
+const PIPE_IMAGE_BASE_PATH = "/pipeimages/";
 const GENERIC_IMAGE_EXT = ".jpg";
 const SKU_IMAGE_EXT = ".png";
 const VARIANT_LETTERS = ["a", "b", "c"];
@@ -33,6 +39,7 @@ const VARIANT_LETTERS = ["a", "b", "c"];
 /** How many photo variants a product supports - used by the modal gallery. */
 export function variantCountFor(product: Product): number {
   if (product.fineCategory) return 1; // shared category illustration, no zoom/angle
+  if (product.pipeImage) return product.pipeZoomImage ? 2 : 1;
   return product.sku ? 2 : 3;
 }
 
@@ -40,6 +47,10 @@ export function imagePath(product: Product, variant: 1 | 2 | 3): string {
   if (product.fineCategory) {
     const file = FINE_JEWELRY_CATEGORY_IMAGES[product.fineCategory];
     return `${CATEGORY_IMAGE_BASE_PATH}${file ?? "fines.png"}`;
+  }
+  if (product.pipeImage) {
+    const file = variant >= 2 && product.pipeZoomImage ? product.pipeZoomImage : product.pipeImage;
+    return `${PIPE_IMAGE_BASE_PATH}${file}`;
   }
   if (product.sku) {
     // Real catalog photos, named after the product code - no "angle" (variant 2 = zoom here).

@@ -3,10 +3,10 @@ import {
   KARATS, COLORS, CHAIN_FINISH, CLASPS, STONE_TYPES,
   BRACELET_MFG, RING_MFG, RING_FINISH, RING_SETTINGS, RING_SIZES,
   NECKLACE_MFG,
-  PIPE_MATERIALS, PIPE_SHAPES, PIPE_FILTER, PIPE_BOWL, PIPE_STEM, PIPE_FINISH,
 } from "./options";
 import { TIER_LABELS } from "./fineJewelryData";
 import { CHAIN_TYPES } from "./chainData";
+import { PIPE_MATERIALS, PIPE_SHAPES, PIPE_CARVING_STYLES, PIPE_THEMES, PIPE_STEM_COLORS, PIPE_FINISHES } from "./pipeData";
 
 /** Categories shown in the navigation tabs. Bracelet/Ring/Necklace still exist
  *  as data (used by CATEGORY_FACETS etc.) but are intentionally left out of
@@ -85,11 +85,10 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
   ],
   "Tobacco Pipe": [
     { key: "material", type: "checkbox", label: "Material", values: [...PIPE_MATERIALS] },
-    { key: "shape", type: "checkbox", label: "Shape / Model", values: [...PIPE_SHAPES] },
-    { key: "filter", type: "checkbox", label: "Filter Size", values: [...PIPE_FILTER] },
-    { key: "bowl", type: "checkbox", label: "Bowl Size", values: [...PIPE_BOWL] },
-    { key: "stem", type: "checkbox", label: "Stem Material", values: [...PIPE_STEM] },
-    { key: "finish", type: "checkbox", label: "Exterior Finish", values: [...PIPE_FINISH] },
-    { key: "weight", type: "range", label: "Weight (g)" },
+    { key: "pipeShape", type: "checkbox", label: "Shape", values: [...PIPE_SHAPES] },
+    { key: "carvingStyle", type: "checkbox", label: "Carving Style", values: [...PIPE_CARVING_STYLES] },
+    { key: "theme", type: "checkbox", label: "Theme", values: [...PIPE_THEMES] },
+    { key: "stemColor", type: "checkbox", label: "Stem Color", values: [...PIPE_STEM_COLORS] },
+    { key: "finish", type: "checkbox", label: "Finish", values: [...PIPE_FINISHES] },
   ],
 };

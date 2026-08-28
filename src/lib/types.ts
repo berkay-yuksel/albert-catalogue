@@ -65,12 +65,16 @@ export interface Product {
   /** US market demand rating, 1–5. */
   popularity?: number;
 
-  // Tobacco Pipe-only
+  // Tobacco Pipe-only - real catalog data, see data/pipeData.ts
   material?: string;
-  shape?: string;
-  filter?: string;
-  bowl?: string;
-  stem?: string;
+  pipeShape?: string;
+  carvingStyle?: string;
+  theme?: string;
+  stemColor?: string;
+  handmade?: boolean;
+  /** Exact photo filenames from the client data, served from /pipeimages/. */
+  pipeImage?: string;
+  pipeZoomImage?: string;
 }
 
 export type FacetType = "checkbox" | "range";

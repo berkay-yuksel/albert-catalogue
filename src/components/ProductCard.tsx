@@ -14,6 +14,8 @@ function specTags(p: Product): string[] {
   if (p.length) tags.push(p.length + "cm");
   if (p.size) tags.push(p.size);
   if (p.material) tags.push(p.material);
+  if (p.finish && p.finish !== "N/A") tags.push(p.finish);
+  if (p.stemColor) tags.push(p.stemColor);
   return tags.slice(0, 4);
 }
 
@@ -50,7 +52,7 @@ export function ProductCard({
         </div>
       </div>
       <div className="card-body">
-        <div className="card-cat">{product.chainType ?? CAT_LABELS[product.category]}</div>
+        <div className="card-cat">{product.chainType ?? product.material ?? CAT_LABELS[product.category]}</div>
         <div className="card-name">{product.name}</div>
         <div className="card-specs">
           {specTags(product).map((t) => (

@@ -19,6 +19,14 @@ const SKU_GALLERY: { variant: 1 | 2 | 3; label: string }[] = [
   { variant: 2, label: "Zoom Detail" },
 ];
 
+/** Handles the rare case a spec value is an array (kept generic in case a
+ *  future field is multi-value again) alongside plain strings/booleans. */
+function formatSpecValue(value: unknown): string {
+  if (Array.isArray(value)) return value.join(", ");
+  if (value === true) return "Yes";
+  return String(value);
+}
+
 export function ProductModal({
   product,
   onClose,
@@ -31,9 +39,11 @@ export function ProductModal({
   const [imgIndex, setImgIndex] = useState(0);
   const gallery = variantCountFor(product) === 2 ? SKU_GALLERY : FULL_GALLERY;
 
-  const specs = DETAIL_FIELDS.filter(
-    (f) => product[f.key] !== undefined && product[f.key] !== "N/A" && product[f.key] !== 0 && product[f.key] !== ""
-  );
+  const specs = DETAIL_FIELDS.filter((f) => {
+    const v = product[f.key];
+    if (Array.isArray(v)) return v.length > 0;
+    return v !== undefined && v !== "N/A" && v !== 0 && v !== "" && v !== false;
+  });
 
   function step(dir: number) {
     setImgIndex((i) => (i + dir + gallery.length) % gallery.length);
@@ -81,7 +91,7 @@ export function ProductModal({
               <div className="spec-row" key={f.key}>
                 <span className="k">{f.label}</span>
                 <span className="v">
-                  {product[f.key]}
+                  {formatSpecValue(product[f.key])}
                   {f.unit ? ` ${f.unit}` : ""}
                 </span>
               </div>

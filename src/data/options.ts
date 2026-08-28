@@ -66,12 +66,6 @@ export const K8_TYPES = ["Chain", "Bracelet", "Ring", "Necklace", "Earrings", "P
 export const K8_MFG = ["Hollow", "Solid", "Stamped", "Cast"] as const;
 export const K8_MARKETS = ["Middle East", "Eastern Europe", "Central Asia", "Latin America", "USA"] as const;
 
-export const PIPE_MATERIALS = ["Meerschaum", "Briar Wood", "Olive Wood", "Morta (Bog Oak)", "Corn Cob"] as const;
-export const PIPE_SHAPES = ["Billiard", "Bent", "Apple", "Dublin", "Canadian", "Bulldog", "Poker"] as const;
-export const PIPE_FILTER = ["9 mm", "6 mm", "Non-Filtered"] as const;
-export const PIPE_BOWL = ["Small", "Medium", "Large"] as const;
-export const PIPE_STEM = ["Acrylic", "Ebonite", "Amber", "Cumberland"] as const;
-export const PIPE_FINISH = ["Smooth", "Sandblasted", "Rusticated"] as const;
 
 /** Deterministic round-robin picker - same helper the original catalog used
  *  to spread demo attribute values across generated products. */
