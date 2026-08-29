@@ -8,7 +8,7 @@ import {
   K8_MFG,
   pick,
 } from "./options";
-import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT } from "./fineJewelryData";
+import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT, TIER_BY_DIFFICULTY, tierLabel } from "./fineJewelryData";
 import { CHAIN_ITEMS } from "./chainData";
 import { PIPE_ITEMS } from "./pipeData";
 
@@ -76,11 +76,12 @@ function buildProducts(): Product[] {
   FINE_JEWELRY_ITEMS.forEach((item, i) => {
     const color = pick(COLORS, i);
     const finish = pick(CHAIN_FINISH, i + 1);
+    const tier = TIER_BY_DIFFICULTY[item.difficulty];
     products.push({
       id: uid++, category: "8K Gold Collection", name: item.name,
       fineCategory: SUB_CATEGORY_TO_PARENT[item.subCategory] ?? item.subCategory,
       fineSubCategory: item.subCategory,
-      difficulty: item.difficulty, popularity: item.popularity,
+      difficulty: item.difficulty, tier, tierLabel: tierLabel(tier), popularity: item.popularity,
       karat: "8K (333)", color, mfg: pick(K8_MFG, i),
       finish, clasp: "N/A",
       stone: pick(STONE_TYPES, i),
@@ -100,7 +101,6 @@ function buildProducts(): Product[] {
       pipeImage: item.image, pipeZoomImage: item.zoomImage,
       material: item.material, pipeShape: item.shape, carvingStyle: item.carvingStyle,
       theme: item.theme, stemColor: item.stemColor, finish: item.finish, handmade: item.handmade,
-      boxIncluded: item.boxIncluded,
       karat: "N/A", color: "N/A", mfg: "N/A", clasp: "N/A", stone: "N/A",
       width: 0, length: 0, weight: +(30 + ((i * 11) % 40)).toFixed(0), stock: "In Stock",
       price: 0, imgSlug: "",

@@ -120,6 +120,7 @@ export const FINE_JEWELRY_ITEMS: FineJewelryItem[] = [
   { subCategory: "Men's Necklaces", name: "Men's Chain Necklaces", description: "Men's gold chain necklaces", difficulty: "Easy", popularity: 5 },
   { subCategory: "Men's Rings", name: "Men's Rings", description: "Men's rings", difficulty: "Moderate", popularity: 5 },
   { subCategory: "Men's Rings", name: "Men's Signet Rings", description: "Personalized men's signet rings", difficulty: "Moderate", popularity: 5 },
+  { subCategory: "Men's Chains", name: "Men's Gourmet Chains", description: "Bold men's gourmet chains", difficulty: "Easy", popularity: 5 },
   { subCategory: "Children's Jewelry", name: "Children's Jewelry", description: "Jewelry designed for children", difficulty: "Easy", popularity: 3 },
   { subCategory: "Children's Jewelry", name: "Children's Bracelets", description: "Children's bracelets", difficulty: "Easy", popularity: 3 },
   { subCategory: "Children's Jewelry", name: "Children's ID Bracelets", description: "Personalized children's ID bracelets", difficulty: "Moderate", popularity: 3 },
@@ -140,6 +141,15 @@ export const FINE_JEWELRY_ITEMS: FineJewelryItem[] = [
   { subCategory: "Bridal Jewelry", name: "Bridal Jewelry Sets", description: "Coordinated bridal jewelry sets", difficulty: "Difficult", popularity: 4 },
   { subCategory: "Gemstone Jewelry Sets", name: "Gemstone Jewelry Sets", description: "Jewelry sets featuring natural gemstones", difficulty: "Difficult", popularity: 4 },
   { subCategory: "Diamond Jewelry Sets", name: "Diamond Jewelry Sets", description: "Coordinated diamond jewelry sets", difficulty: "Very Difficult", popularity: 4 },
+  { subCategory: "Chains", name: "Gold Chains", description: "Gold chains in various link styles and weights", difficulty: "Easy", popularity: 5 },
+  { subCategory: "Chains", name: "Gourmet Chains", description: "Gold gourmet chains", difficulty: "Easy", popularity: 5 },
+  { subCategory: "Chains", name: "Cuban Link Chains", description: "Bold Cuban link chains", difficulty: "Moderate", popularity: 5 },
+  { subCategory: "Chains", name: "Rope Chains", description: "Twisted rope-style chains", difficulty: "Easy", popularity: 4 },
+  { subCategory: "Chains", name: "Box Chains", description: "Structured box chains", difficulty: "Easy", popularity: 4 },
+  { subCategory: "Chains", name: "Figaro Chains", description: "Chains with alternating short and long links", difficulty: "Easy", popularity: 4 },
+  { subCategory: "Chains", name: "Paperclip Chains", description: "Elongated paperclip-style chains", difficulty: "Easy", popularity: 5 },
+  { subCategory: "Chains", name: "Snake Chains", description: "Smooth flexible snake chains", difficulty: "Easy", popularity: 4 },
+  { subCategory: "Chains", name: "Franco Chains", description: "Dense V-link Franco chains", difficulty: "Moderate", popularity: 4 },
   { subCategory: "Tennis Jewelry", name: "Tennis Jewelry", description: "Jewelry featuring continuous rows of gemstones", difficulty: "Difficult", popularity: 5 },
   { subCategory: "Bridal Jewelry", name: "Bridal Jewelry", description: "Fine jewelry for bridal styling", difficulty: "Difficult", popularity: 4 },
   { subCategory: "Engagement Jewelry", name: "Engagement Jewelry", description: "Jewelry for engagements and proposals", difficulty: "Difficult", popularity: 5 },
@@ -162,7 +172,7 @@ export const FINE_JEWELRY_ITEMS: FineJewelryItem[] = [
 
 /** The 51 specific sub-categories, as given in the source sheet. */
 export const FINE_JEWELRY_SUB_CATEGORIES: string[] = [
-  "Anklets", "Antique-Inspired Jewelry", "Baguette", "Birthstone", "Body Jewelry", "Bottega Style", "Bracelets", "Bridal Accessories", "Bridal Jewelry", "Brooches & Pins", "Charm Jewelry", "Children's Jewelry", "Coin Jewelry", "Custom Jewelry", "Designer Jewelry", "Diamond", "Diamond Jewelry Sets", "Earrings", "Engagement", "Engagement Jewelry", "Fine Jewelry", "Gemstone Jewelry Sets", "Gemstones", "Jewelry Components", "Jewelry Findings", "Jewelry Sets", "Layering Jewelry", "Men's Accessories", "Men's Bracelets", "Men's Jewelry", "Men's Necklaces", "Men's Rings", "Mesh & Woven", "Necklaces", "Pearls", "Pendants", "Personalized Jewelry", "Precious Gemstones", "Rings", "Semi-Finished Jewelry", "Semi-Precious Gemstones", "Statement Jewelry", "Stone Setting", "Symbol Jewelry", "Tennis Jewelry", "Turkish-Inspired Jewelry", "Vintage Jewelry", "Wedding", "Wedding Jewelry",
+  "Anklets", "Antique-Inspired Jewelry", "Baguette", "Birthstone", "Body Jewelry", "Bottega Style", "Bracelets", "Bridal Accessories", "Bridal Jewelry", "Brooches & Pins", "Chains", "Charm Jewelry", "Children's Jewelry", "Coin Jewelry", "Custom Jewelry", "Designer Jewelry", "Diamond", "Diamond Jewelry Sets", "Earrings", "Engagement", "Engagement Jewelry", "Fine Jewelry", "Gemstone Jewelry Sets", "Gemstones", "Jewelry Components", "Jewelry Findings", "Jewelry Sets", "Layering Jewelry", "Men's Accessories", "Men's Bracelets", "Men's Chains", "Men's Jewelry", "Men's Necklaces", "Men's Rings", "Mesh & Woven", "Necklaces", "Pearls", "Pendants", "Personalized Jewelry", "Precious Gemstones", "Rings", "Semi-Finished Jewelry", "Semi-Precious Gemstones", "Statement Jewelry", "Stone Setting", "Symbol Jewelry", "Tennis Jewelry", "Turkish-Inspired Jewelry", "Vintage Jewelry", "Wedding", "Wedding Jewelry",
 ];
 
 /** Maps each of the 51 sub-categories to one of 13 broader parent categories. */
@@ -177,6 +187,7 @@ export const SUB_CATEGORY_TO_PARENT: Record<string, string> = {
   "Bridal Accessories": "Rings & Bridal",
   "Bridal Jewelry": "Rings & Bridal",
   "Brooches & Pins": "Specialty & Body",
+  "Chains": "Chains",
   "Charm Jewelry": "Charms & Sets",
   "Children's Jewelry": "Specialty & Body",
   "Coin Jewelry": "Specialty & Body",
@@ -196,6 +207,7 @@ export const SUB_CATEGORY_TO_PARENT: Record<string, string> = {
   "Layering Jewelry": "Necklaces & Pendants",
   "Men's Accessories": "Men's Jewelry",
   "Men's Bracelets": "Bracelets",
+  "Men's Chains": "Chains",
   "Men's Jewelry": "Men's Jewelry",
   "Men's Necklaces": "Necklaces & Pendants",
   "Men's Rings": "Rings & Bridal",
@@ -220,7 +232,7 @@ export const SUB_CATEGORY_TO_PARENT: Record<string, string> = {
 
 /** The 13 broader parent categories shown as the primary "Category" filter. */
 export const FINE_JEWELRY_PARENT_CATEGORIES: string[] = [
-  "Bracelets", "Charms & Sets", "Custom & Components", "Diamonds & Gemstones", "Earrings", "Fine Jewelry (General)", "Men's Jewelry", "Necklaces & Pendants", "Pearls", "Rings & Bridal", "Specialty & Body", "Style & Heritage",
+  "Bracelets", "Chains", "Charms & Sets", "Custom & Components", "Diamonds & Gemstones", "Earrings", "Fine Jewelry (General)", "Men's Jewelry", "Necklaces & Pendants", "Pearls", "Rings & Bridal", "Specialty & Body", "Style & Heritage",
 ];
 
 /** One shared illustration per parent category (in /public/catimages) - every
@@ -228,6 +240,7 @@ export const FINE_JEWELRY_PARENT_CATEGORIES: string[] = [
  *  Jewelry items don't have individual product photos. */
 export const FINE_JEWELRY_CATEGORY_IMAGES: Record<string, string> = {
   "Bracelets": "bracelets.png",
+  "Chains": "chains.png",
   "Charms & Sets": "charms.png",
   "Custom & Components": "customs.png",
   "Diamonds & Gemstones": "gems.png",
@@ -244,6 +257,34 @@ export const FINE_JEWELRY_CATEGORY_IMAGES: Record<string, string> = {
 export const DIFFICULTY_LEVELS: string[] = [
   "Very Easy", "Easy", "Moderate", "Moderately Difficult", "Difficult", "Very Difficult",
 ];
+
+/** Difficulty -> tier number. Harder craftsmanship = higher tier. */
+export const TIER_BY_DIFFICULTY: Record<string, number> = {
+  "Very Easy": 1,
+  "Easy": 2,
+  "Moderate": 3,
+  "Moderately Difficult": 4,
+  "Difficult": 5,
+  "Very Difficult": 6,
+};
+
+/** Tier number -> gaming-style letter grade. Harder craftsmanship = higher letter. */
+export const TIER_LETTER: Record<number, string> = {
+  1: "F",
+  2: "D",
+  3: "C",
+  4: "B",
+  5: "A",
+  6: "S",
+};
+
+/** e.g. "S Tier" for tier 6. Used for both display and the checkbox filter. */
+export function tierLabel(tier: number): string {
+  return `${TIER_LETTER[tier] ?? "?"} Tier`;
+}
+
+/** Letter tiers in best-to-worst order, for the filter list and any fixed ordering. */
+export const TIER_LABELS: string[] = [6, 5, 4, 3, 2, 1].map(tierLabel);
 
 /** Parent category -> its specific sub-categories, derived from SUB_CATEGORY_TO_PARENT.
  *  Used to render the nested Category → Sub Category tree in the sidebar. */

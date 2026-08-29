@@ -15,23 +15,28 @@ export const SORT_OPTIONS: SortOption[] = [
   { value: "id-asc", label: "Oldest First" },
 ];
 
-/** Chain has its own base list (no Newest/Oldest, no Karat) plus Thickness/
- *  Weight/Product Code, since the client sheet gives a real per-SKU gauge,
- *  weight, and catalog code. */
+/** Chain also sorts by Thickness/Weight/Product Code/Karat, since the client
+ *  sheet gives a real per-SKU gauge, weight, and catalog code (Karat is
+ *  demo-assigned but still a familiar sort dimension for gold buyers). */
 const CHAIN_SORT_OPTIONS: SortOption[] = [
-  { value: "name-asc", label: "Name (A–Z)" },
-  { value: "name-desc", label: "Name (Z–A)" },
-  { value: "price-asc", label: "Price (Low → High)" },
-  { value: "price-desc", label: "Price (High → Low)" },
   { value: "width-asc", label: "Thickness (Low → High)" },
   { value: "width-desc", label: "Thickness (High → Low)" },
   { value: "weight-asc", label: "Weight (Low → High)" },
   { value: "weight-desc", label: "Weight (High → Low)" },
   { value: "sku-asc", label: "Product Code (A → Z)" },
   { value: "sku-desc", label: "Product Code (Z → A)" },
+  { value: "karat-desc", label: "Karat (High → Low)" },
+  { value: "karat-asc", label: "Karat (Low → High)" },
+];
+
+/** Fine Jewelry also sorts by Tier (craftsmanship difficulty, S → F). */
+const FINE_JEWELRY_SORT_OPTIONS: SortOption[] = [
+  { value: "tier-desc", label: "Craftsmanship Tier (S → F)" },
+  { value: "tier-asc", label: "Craftsmanship Tier (F → S)" },
 ];
 
 export function sortOptionsForCategory(category: Category): SortOption[] {
-  if (category === "Chain") return CHAIN_SORT_OPTIONS;
+  if (category === "Chain") return [...SORT_OPTIONS, ...CHAIN_SORT_OPTIONS];
+  if (category === "8K Gold Collection") return [...SORT_OPTIONS, ...FINE_JEWELRY_SORT_OPTIONS];
   return SORT_OPTIONS;
 }

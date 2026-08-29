@@ -6,7 +6,6 @@ import { CAT_LABELS, FINE_JEWELRY_CATEGORY } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 import { buildOrderMailto, buildOrderText } from "@/lib/mailto";
 import type { CartLine, OrderCartApi } from "@/lib/useOrderCart";
-import { PIPE_FILTER_ADDON_PRICE } from "@/lib/useOrderCart";
 
 const KARAT_OPTIONS = ["8K (333)", "10K", "14K", "18K", "22K", "24K"];
 
@@ -47,7 +46,6 @@ function OrderItemRow({
   onChangeQty,
   onSetQty,
   onSetKarat,
-  onSetAddFilter,
   onRemove,
   linePrice,
 }: {
@@ -57,7 +55,6 @@ function OrderItemRow({
   onChangeQty: (key: string, delta: number) => void;
   onSetQty: (key: string, qty: number) => void;
   onSetKarat: (key: string, karat: string) => void;
-  onSetAddFilter: (key: string, addFilter: boolean) => void;
   onRemove: (key: string) => void;
   linePrice: number;
 }) {
@@ -81,7 +78,6 @@ function OrderItemRow({
   }
 
   const hasKaratPricing = !!product?.pricesByKarat;
-  const isPipe = product?.category === "Tobacco Pipe";
 
   return (
     <div className="order-item">
@@ -115,16 +111,6 @@ function OrderItemRow({
               </option>
             ))}
           </select>
-        )}
-        {isPipe && (
-          <label className="order-addon-check">
-            <input
-              type="checkbox"
-              checked={!!line.addFilter}
-              onChange={(e) => onSetAddFilter(itemKey, e.target.checked)}
-            />
-            <span>Add Filter (+{fmtPrice(PIPE_FILTER_ADDON_PRICE)} each)</span>
-          </label>
         )}
         <div className="order-item-qty">
           <button onClick={() => onChangeQty(itemKey, -1)} aria-label="Decrease quantity">
@@ -168,7 +154,7 @@ export function OrderPanel({
   const [copied, setCopied] = useState(false);
   const [notes, setNotes] = useState("");
   const [mailtoWarning, setMailtoWarning] = useState(false);
-  const keys = cart.order;
+  const keys = Object.keys(cart.items);
   const totalWeight = cart.totalWeight(products);
   const totalPrice = cart.totalPrice(products);
   const isFreeOrder = keys.length > 0 && totalPrice === 0;
@@ -247,7 +233,6 @@ export function OrderPanel({
                   onChangeQty={cart.changeQty}
                   onSetQty={cart.setQty}
                   onSetKarat={cart.setKarat}
-                  onSetAddFilter={cart.setAddFilter}
                   onRemove={cart.remove}
                   linePrice={p ? cart.linePrice(p, line) : 0}
                 />

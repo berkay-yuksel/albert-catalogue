@@ -9,14 +9,9 @@ export interface CartLine {
   /** Selected karat for this line, e.g. "14K". Only meaningful for products
    *  with `pricesByKarat` (currently: Chain); ignored otherwise. */
   karat: string;
-  /** Optional "Add Filter" add-on (Tobacco Pipe only) - adds
-   *  PIPE_FILTER_ADDON_PRICE per unit when true. */
-  addFilter?: boolean;
 }
 
 export const DEFAULT_KARAT = "14K";
-/** Flat add-on price per unit when a pipe's "Add Filter" option is checked. */
-export const PIPE_FILTER_ADDON_PRICE = 30;
 
 /** Cart lines are keyed by product+karat together, so the same product can
  *  appear as more than one line (e.g. 2x at 14K and 3x at 18K). */
@@ -27,10 +22,6 @@ function lineKey(productId: number, karat: string): string {
 export interface OrderCartApi {
   /** lineKey(productId, karat) -> line */
   items: Record<string, CartLine>;
-  /** Keys in the order they should be displayed. Stable across karat changes
-   *  (changing a line's karat updates it in place rather than moving it to
-   *  the end), so the order list doesn't visually reshuffle as you edit it. */
-  order: string[];
   itemCount: number;
   totalWeight: (products: Product[]) => number;
   totalPrice: (products: Product[]) => number;
@@ -44,12 +35,10 @@ export interface OrderCartApi {
   changeQty: (key: string, delta: number) => void;
   /** Sets an exact quantity (e.g. from a manual text input). Values <= 0 remove the line. */
   setQty: (key: string, qty: number) => void;
-  /** Changes a line's karat, keeping its position in the list. If a line
-   *  already exists at the target karat for the same product, the two merge
-   *  (quantities add together, staying at that other line's position). */
+  /** Changes a line's karat. If a line already exists at the target karat for
+   *  the same product, the two merge (quantities add together) rather than
+   *  leaving two separate lines at the same karat. */
   setKarat: (key: string, karat: string) => void;
-  /** Toggles the "Add Filter" add-on for a line (Tobacco Pipe only). */
-  setAddFilter: (key: string, addFilter: boolean) => void;
   clear: () => void;
 }
 
@@ -61,7 +50,6 @@ export interface OrderCartApi {
  */
 export function useOrderCart(): OrderCartApi {
   const [items, setItems] = useState<Record<string, CartLine>>({});
-  const [order, setOrder] = useState<string[]>([]);
 
   const itemCount = useMemo(
     () => Object.values(items).reduce((sum, line) => sum + line.qty, 0),
@@ -69,18 +57,15 @@ export function useOrderCart(): OrderCartApi {
   );
 
   function linePrice(product: Product, line: CartLine): number {
-    const base = product.pricesByKarat?.[line.karat] ?? product.price;
-    const addon = product.category === "Tobacco Pipe" && line.addFilter ? PIPE_FILTER_ADDON_PRICE : 0;
-    return base + addon;
+    return product.pricesByKarat?.[line.karat] ?? product.price;
   }
 
   function add(productId: number, karat: string = DEFAULT_KARAT) {
     const key = lineKey(productId, karat);
     setItems((prev) => ({
       ...prev,
-      [key]: { productId, karat, qty: (prev[key]?.qty ?? 0) + 1, addFilter: prev[key]?.addFilter ?? false },
+      [key]: { productId, karat, qty: (prev[key]?.qty ?? 0) + 1 },
     }));
-    setOrder((prev) => (prev.includes(key) ? prev : [...prev, key]));
   }
 
   function addQty(productId: number, qty: number, karat: string = DEFAULT_KARAT) {
@@ -88,9 +73,8 @@ export function useOrderCart(): OrderCartApi {
     const key = lineKey(productId, karat);
     setItems((prev) => ({
       ...prev,
-      [key]: { productId, karat, qty: (prev[key]?.qty ?? 0) + qty, addFilter: prev[key]?.addFilter ?? false },
+      [key]: { productId, karat, qty: (prev[key]?.qty ?? 0) + qty },
     }));
-    setOrder((prev) => (prev.includes(key) ? prev : [...prev, key]));
   }
 
   function remove(key: string) {
@@ -99,7 +83,6 @@ export function useOrderCart(): OrderCartApi {
       delete next[key];
       return next;
     });
-    setOrder((prev) => prev.filter((k) => k !== key));
   }
 
   function changeQty(key: string, delta: number) {
@@ -112,11 +95,6 @@ export function useOrderCart(): OrderCartApi {
       else copy[key] = { ...line, qty: nextQty };
       return copy;
     });
-    setOrder((prev) => {
-      const line = items[key];
-      const wouldRemove = line && line.qty + delta <= 0;
-      return wouldRemove ? prev.filter((k) => k !== key) : prev;
-    });
   }
 
   function setQty(key: string, qty: number) {
@@ -128,48 +106,23 @@ export function useOrderCart(): OrderCartApi {
       else copy[key] = { ...line, qty };
       return copy;
     });
-    if (qty <= 0) setOrder((prev) => prev.filter((k) => k !== key));
   }
 
   function setKarat(key: string, karat: string) {
-    const line = items[key];
-    if (!line || line.karat === karat) return;
-    const newKey = lineKey(line.productId, karat);
-    const mergingIntoExisting = !!items[newKey];
-
     setItems((prev) => {
+      const line = prev[key];
+      if (!line || line.karat === karat) return prev;
+      const newKey = lineKey(line.productId, karat);
       const copy = { ...prev };
       delete copy[key];
       // Merge into an existing line at the target karat, if there is one.
-      copy[newKey] = {
-        productId: line.productId, karat, qty: (copy[newKey]?.qty ?? 0) + line.qty,
-        addFilter: copy[newKey]?.addFilter ?? line.addFilter,
-      };
+      copy[newKey] = { productId: line.productId, karat, qty: (copy[newKey]?.qty ?? 0) + line.qty };
       return copy;
-    });
-
-    setOrder((prev) => {
-      if (mergingIntoExisting) {
-        // The target line already has its own spot in the order - just drop this one.
-        return prev.filter((k) => k !== key);
-      }
-      // No existing line at the target karat: relabel this slot in place, so
-      // the row doesn't jump to the end of the list.
-      return prev.map((k) => (k === key ? newKey : k));
-    });
-  }
-
-  function setAddFilter(key: string, addFilter: boolean) {
-    setItems((prev) => {
-      const line = prev[key];
-      if (!line) return prev;
-      return { ...prev, [key]: { ...line, addFilter } };
     });
   }
 
   function clear() {
     setItems({});
-    setOrder([]);
   }
 
   function totalWeight(products: Product[]): number {
@@ -187,7 +140,7 @@ export function useOrderCart(): OrderCartApi {
   }
 
   return {
-    items, order, itemCount, totalWeight, totalPrice, linePrice,
-    add, addQty, remove, changeQty, setQty, setKarat, setAddFilter, clear,
+    items, itemCount, totalWeight, totalPrice, linePrice,
+    add, addQty, remove, changeQty, setQty, setKarat, clear,
   };
 }

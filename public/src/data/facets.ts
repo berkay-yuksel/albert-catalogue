@@ -4,8 +4,9 @@ import {
   BRACELET_MFG, RING_MFG, RING_FINISH, RING_SETTINGS, RING_SIZES,
   NECKLACE_MFG,
 } from "./options";
+import { TIER_LABELS } from "./fineJewelryData";
 import { CHAIN_TYPES } from "./chainData";
-import { PIPE_MATERIALS, PIPE_SHAPES, PIPE_CARVING_STYLES, PIPE_THEMES, PIPE_STEM_COLORS, PIPE_FINISHES, PIPE_BOX_OPTIONS } from "./pipeData";
+import { PIPE_MATERIALS, PIPE_SHAPES, PIPE_CARVING_STYLES, PIPE_THEMES, PIPE_STEM_COLORS, PIPE_FINISHES } from "./pipeData";
 
 /** Categories shown in the navigation tabs. Bracelet/Ring/Necklace still exist
  *  as data (used by CATEGORY_FACETS etc.) but are intentionally left out of
@@ -79,8 +80,11 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
   ],
   // Fine Jewelry filters: Category/Sub Category are rendered as a nested
   // tree directly in Sidebar.tsx (not through this generic config) so sub-
-  // categories can expand out from under their parent category.
-  "8K Gold Collection": [],
+  // categories can expand out from under their parent category. Only Tier
+  // goes through the normal facet renderer.
+  "8K Gold Collection": [
+    { key: "tierLabel", type: "checkbox", label: "Craftsmanship Tier", values: [...TIER_LABELS] },
+  ],
   "Tobacco Pipe": [
     { key: "material", type: "checkbox", label: "Material", values: [...PIPE_MATERIALS] },
     { key: "pipeShape", type: "checkbox", label: "Shape", values: [...PIPE_SHAPES] },
@@ -88,6 +92,5 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
     { key: "theme", type: "checkbox", label: "Theme", values: [...PIPE_THEMES] },
     { key: "stemColor", type: "checkbox", label: "Stem Color", values: [...PIPE_STEM_COLORS] },
     { key: "finish", type: "checkbox", label: "Finish", values: [...PIPE_FINISHES] },
-    { key: "boxIncluded", type: "checkbox", label: "Box", values: [...PIPE_BOX_OPTIONS] },
   ],
 };

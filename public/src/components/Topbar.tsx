@@ -5,12 +5,12 @@ import Link from "next/link";
 export function Topbar() {
   return (
     <div className="topbar">
-      <Link href="/" className="brand">
+      <div className="brand">
         <div>
           <h1>Albert C Jewelry</h1>
           <span>B2B Wholesale Catalog · Chains · Jewelry · Pipes</span>
         </div>
-      </Link>
+      </div>
       <nav className="topbar-pages">
         <Link href="/about">About</Link>
         <Link href="/contact">Contact</Link>

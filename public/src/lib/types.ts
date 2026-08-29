@@ -63,6 +63,10 @@ export interface Product {
   /** Specific sub-category from the source sheet (e.g. "Men's Bracelets") - 51 values, secondary filter. */
   fineSubCategory?: string;
   difficulty?: string;
+  /** Craftsmanship tier derived from difficulty: 1 (Very Easy) – 6 (Very Difficult). Higher = harder. */
+  tier?: number;
+  /** Display/filter form of tier, e.g. "S Tier" for tier 6. */
+  tierLabel?: string;
   /** US market demand rating, 1–5. */
   popularity?: number;
 
@@ -73,8 +77,6 @@ export interface Product {
   theme?: string;
   stemColor?: string;
   handmade?: boolean;
-  /** "Included" or "Not Included" - kept as a string (not boolean) so it plugs into the generic checkbox facet system like other filters. */
-  boxIncluded?: string;
   /** Exact photo filenames from the client data, served from /pipeimages/. */
   pipeImage?: string;
   pipeZoomImage?: string;
@@ -106,7 +108,7 @@ export type FacetSelections = Record<string, Set<string>>;
 /** facet key -> selected numeric range */
 export type Ranges = Record<string, NumericRange>;
 
-export type SortKey = "name" | "price" | "id" | "width" | "weight" | "sku" | "chainType" | "karat";
+export type SortKey = "name" | "price" | "id" | "width" | "weight" | "sku" | "chainType" | "tier" | "karat";
 export type SortDir = "asc" | "desc";
 /** Combined sort value as used by the <select>, e.g. "name-asc". */
 export type SortValue = `${SortKey}-${SortDir}`;

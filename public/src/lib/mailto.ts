@@ -16,8 +16,7 @@ function itemLines(items: Record<string, CartLine>, products: Product[], linePri
       const priceLabel = price > 0 ? fmtPrice(price * line.qty) : "price on request";
       const codeLabel = p.sku ? ` [${p.sku}]` : "";
       const karatLabel = p.pricesByKarat ? ` @ ${line.karat}` : "";
-      const filterLabel = p.category === "Tobacco Pipe" && line.addFilter ? " + Filter" : "";
-      return `- ${p.name}${codeLabel} (${CAT_LABELS[p.category]}) x${line.qty}${karatLabel}${filterLabel}: ${priceLabel}`;
+      return `- ${p.name}${codeLabel} (${CAT_LABELS[p.category]}) x${line.qty}${karatLabel}: ${priceLabel}`;
     })
     .filter(Boolean)
     .join("\n");

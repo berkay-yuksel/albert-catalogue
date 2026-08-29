@@ -75,6 +75,8 @@ export function sortProducts(list: Product[], sort: SortValue): Product[] {
         return mul * (a.sku ?? "").localeCompare(b.sku ?? "", undefined, { numeric: true });
       case "chainType":
         return mul * (a.chainType ?? "").localeCompare(b.chainType ?? "");
+      case "tier":
+        return mul * ((a.tier ?? 0) - (b.tier ?? 0));
       case "karat":
         return mul * ((KARAT_RANK[a.karat] ?? 0) - (KARAT_RANK[b.karat] ?? 0));
       default:
