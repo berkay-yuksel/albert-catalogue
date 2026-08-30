@@ -69,39 +69,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {ready && diagnostics && (
-        <div className="static-section">
-          <h2>Environment Diagnostics</h2>
-          <p>
-            This shows which environment variable <b>names</b> this server actually found (never
-            the values) — useful when a Redis integration named things differently than expected.
-          </p>
-          <div className="admin-karat-table">
-            <div className="admin-karat-row">
-              <span>Redis URL</span>
-              <span className="mono">
-                {diagnostics.urlFound ? `✓ found (${diagnostics.urlEnvName})` : "✗ not found"}
-              </span>
-            </div>
-            <div className="admin-karat-row">
-              <span>Redis Token</span>
-              <span className="mono">
-                {diagnostics.tokenFound ? `✓ found (${diagnostics.tokenEnvName})` : "✗ not found"}
-              </span>
-            </div>
-            <div className="admin-karat-row">
-              <span>ADMIN_PASSWORD</span>
-              <span className="mono">{diagnostics.adminPasswordSet ? "✓ set" : "✗ not set"}</span>
-            </div>
-          </div>
-          {diagnostics.relatedEnvNames.length > 0 && (
-            <p style={{ marginTop: 10 }}>
-              Env var names on this server containing &quot;redis&quot; or &quot;kv&quot;:{" "}
-              <span className="mono">{diagnostics.relatedEnvNames.join(", ")}</span>
-            </p>
-          )}
-        </div>
-      )}
+   
 
       <div className="static-section">
         <h2>Business Inputs (editable)</h2>
