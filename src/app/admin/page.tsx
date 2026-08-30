@@ -14,7 +14,7 @@ import { fmtPrice, PRODUCTS } from "@/data/products";
 const SAMPLE_CHAIN = PRODUCTS.find((p) => p.category === "Chain");
 
 export default function AdminPage() {
-  const { settings, saveSettings, ready, storeConfigured } = usePricingSettings();
+  const { settings, saveSettings, ready, storeConfigured, diagnostics } = usePricingSettings();
   const [draft, setDraft] = useState<ChainPricingSettings>(settings);
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<{ kind: "idle" | "saving" | "saved" | "error"; message?: string }>({
@@ -66,6 +66,40 @@ export default function AdminPage() {
           Upstash Redis database (via the Vercel Marketplace or upstash.com) and set{" "}
           <code>UPSTASH_REDIS_REST_URL</code> / <code>UPSTASH_REDIS_REST_TOKEN</code> in your
           environment variables, then redeploy.
+        </div>
+      )}
+
+      {ready && diagnostics && (
+        <div className="static-section">
+          <h2>Environment Diagnostics</h2>
+          <p>
+            This shows which environment variable <b>names</b> this server actually found (never
+            the values) — useful when a Redis integration named things differently than expected.
+          </p>
+          <div className="admin-karat-table">
+            <div className="admin-karat-row">
+              <span>Redis URL</span>
+              <span className="mono">
+                {diagnostics.urlFound ? `✓ found (${diagnostics.urlEnvName})` : "✗ not found"}
+              </span>
+            </div>
+            <div className="admin-karat-row">
+              <span>Redis Token</span>
+              <span className="mono">
+                {diagnostics.tokenFound ? `✓ found (${diagnostics.tokenEnvName})` : "✗ not found"}
+              </span>
+            </div>
+            <div className="admin-karat-row">
+              <span>ADMIN_PASSWORD</span>
+              <span className="mono">{diagnostics.adminPasswordSet ? "✓ set" : "✗ not set"}</span>
+            </div>
+          </div>
+          {diagnostics.relatedEnvNames.length > 0 && (
+            <p style={{ marginTop: 10 }}>
+              Env var names on this server containing &quot;redis&quot; or &quot;kv&quot;:{" "}
+              <span className="mono">{diagnostics.relatedEnvNames.join(", ")}</span>
+            </p>
+          )}
         </div>
       )}
 

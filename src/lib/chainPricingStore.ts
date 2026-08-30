@@ -28,11 +28,33 @@ export interface StoredPricingSettings extends ChainPricingSettings {
 
 const REDIS_KEY = "chain-pricing-settings";
 
+// Different Redis integrations name these differently depending on how the
+// database was provisioned. We check every name we've seen in the wild:
+//   - UPSTASH_REDIS_REST_URL / _TOKEN         (raw Upstash, or newer Vercel Marketplace integrations)
+//   - KV_REST_API_URL / KV_REST_API_TOKEN      (legacy "Vercel KV" naming)
+//   - Prefixed variants, e.g. STORAGE_URL / REDIS_URL, some integrations add
+//     a project-specific prefix (checked via ENDS_WITH matching below).
+const URL_ENV_CANDIDATES = ["UPSTASH_REDIS_REST_URL", "KV_REST_API_URL"];
+const TOKEN_ENV_CANDIDATES = ["UPSTASH_REDIS_REST_TOKEN", "KV_REST_API_TOKEN"];
+
+function findEnvValue(candidates: string[]): { value: string | undefined; matchedName: string | undefined } {
+  for (const name of candidates) {
+    if (process.env[name]) return { value: process.env[name], matchedName: name };
+  }
+  // Fall back to a suffix match, in case Vercel prefixed the name with the
+  // integration/store name (e.g. "MY_REDIS_UPSTASH_REDIS_REST_URL").
+  for (const [key, value] of Object.entries(process.env)) {
+    if (!value) continue;
+    if (candidates.some((c) => key.endsWith(c))) return { value, matchedName: key };
+  }
+  return { value: undefined, matchedName: undefined };
+}
+
 function getRedisUrl(): string | undefined {
-  return process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+  return findEnvValue(URL_ENV_CANDIDATES).value;
 }
 function getRedisToken(): string | undefined {
-  return process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
+  return findEnvValue(TOKEN_ENV_CANDIDATES).value;
 }
 
 function getRedisClient(): Redis | null {
@@ -46,6 +68,25 @@ function getRedisClient(): Redis | null {
  *  admin page to show a setup notice instead of a confusing save failure. */
 export function isPricingStoreConfigured(): boolean {
   return !!getRedisUrl() && !!getRedisToken();
+}
+
+/** Diagnostic info for the admin page - reports which env var NAMES were
+ *  found (never the actual secret values), so a mismatch between what
+ *  Vercel/Upstash actually named things and what we expect is visible
+ *  without needing to share real credentials with anyone. */
+export function getPricingStoreDiagnostics() {
+  const url = findEnvValue(URL_ENV_CANDIDATES);
+  const token = findEnvValue(TOKEN_ENV_CANDIDATES);
+  return {
+    urlFound: !!url.value,
+    urlEnvName: url.matchedName ?? null,
+    tokenFound: !!token.value,
+    tokenEnvName: token.matchedName ?? null,
+    adminPasswordSet: !!process.env.ADMIN_PASSWORD,
+    // All env var names present on this server that contain "REDIS" or "KV" -
+    // helps spot an unexpected naming convention at a glance.
+    relatedEnvNames: Object.keys(process.env).filter((k) => /redis|_kv_|^kv_/i.test(k)),
+  };
 }
 
 /** Reads the current settings. Falls back to defaults if Redis isn't

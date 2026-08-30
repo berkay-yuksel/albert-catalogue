@@ -12,6 +12,15 @@ interface SaveResult {
   error?: string;
 }
 
+interface Diagnostics {
+  urlFound: boolean;
+  urlEnvName: string | null;
+  tokenFound: boolean;
+  tokenEnvName: string | null;
+  adminPasswordSet: boolean;
+  relatedEnvNames: string[];
+}
+
 interface PricingSettingsContextValue {
   settings: ChainPricingSettings;
   /** Saves new settings for everyone (requires the admin password). Returns
@@ -26,6 +35,9 @@ interface PricingSettingsContextValue {
    *  page uses this to show a setup notice instead of a confusing error
    *  only after someone tries to save. */
   storeConfigured: boolean;
+  /** Which env var names were actually found on the server - lets the admin
+   *  page show exactly what's missing/misnamed instead of guessing. */
+  diagnostics: Diagnostics | null;
 }
 
 const PricingSettingsContext = createContext<PricingSettingsContextValue | null>(null);
@@ -34,6 +46,7 @@ export function PricingSettingsProvider({ children }: { children: React.ReactNod
   const [settings, setSettingsState] = useState<ChainPricingSettings>(DEFAULT_PRICING_SETTINGS);
   const [ready, setReady] = useState(false);
   const [storeConfigured, setStoreConfigured] = useState(true);
+  const [diagnostics, setDiagnostics] = useState<Diagnostics | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +56,7 @@ export function PricingSettingsProvider({ children }: { children: React.ReactNod
         if (cancelled) return;
         if (data?.settings) setSettingsState(data.settings);
         setStoreConfigured(!!data?.storeConfigured);
+        setDiagnostics(data?.diagnostics ?? null);
         setReady(true);
       })
       .catch(() => {
@@ -72,8 +86,8 @@ export function PricingSettingsProvider({ children }: { children: React.ReactNod
   }
 
   const value = useMemo(
-    () => ({ settings, saveSettings, ready, storeConfigured }),
-    [settings, ready, storeConfigured]
+    () => ({ settings, saveSettings, ready, storeConfigured, diagnostics }),
+    [settings, ready, storeConfigured, diagnostics]
   );
 
   return <PricingSettingsContext.Provider value={value}>{children}</PricingSettingsContext.Provider>;
@@ -89,6 +103,7 @@ export function usePricingSettings(): PricingSettingsContextValue {
       saveSettings: async () => ({ ok: false, error: "Not connected to the pricing provider." }),
       ready: true,
       storeConfigured: true,
+      diagnostics: null,
     };
   }
   return ctx;

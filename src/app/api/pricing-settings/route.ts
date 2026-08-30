@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getChainPricingSettings, setChainPricingSettings, isPricingStoreConfigured } from "@/lib/chainPricingStore";
+import {
+  getChainPricingSettings,
+  setChainPricingSettings,
+  isPricingStoreConfigured,
+  getPricingStoreDiagnostics,
+} from "@/lib/chainPricingStore";
 
 export async function GET() {
   const settings = await getChainPricingSettings();
-  return NextResponse.json({ settings, storeConfigured: isPricingStoreConfigured() });
+  return NextResponse.json({
+    settings,
+    storeConfigured: isPricingStoreConfigured(),
+    diagnostics: getPricingStoreDiagnostics(),
+  });
 }
 
 export async function POST(request: NextRequest) {
