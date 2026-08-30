@@ -58,7 +58,7 @@ export default function AboutPage() {
         <div className="static-cta">
           <p>Ready to place an order or have a question about our catalog?</p>
           <Link href="/contact" className="btn-primary">
-            Get in Touch
+            Get in Touch!
           </Link>
         </div>
       </main>
