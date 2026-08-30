@@ -52,6 +52,15 @@ export async function POST(request: NextRequest) {
     workmanshipMilyem: w,
     wholesaleProfitMilyem: p,
     goldPricePerGram: g,
+  }).catch((err: unknown) => {
+    // Surfaces real Redis connectivity problems (bad URL/token, network
+    // issue) as a clean JSON error instead of an unhandled 500.
+    const message = err instanceof Error ? err.message : "Unknown error while saving.";
+    return { error: message } as const;
   });
+
+  if ("error" in saved) {
+    return NextResponse.json({ error: saved.error }, { status: 502 });
+  }
   return NextResponse.json({ settings: saved });
 }
