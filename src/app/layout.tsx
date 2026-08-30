@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { PricingSettingsProvider } from "@/lib/PricingSettingsContext";
 
 export const metadata: Metadata = {
   title: "Albert C Jewelry | Gold Chain & Jewelry Wholesale Catalog",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PricingSettingsProvider>{children}</PricingSettingsProvider>
+      </body>
     </html>
   );
 }

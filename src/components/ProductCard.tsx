@@ -3,6 +3,7 @@
 import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
+import { useChainPrices } from "@/lib/PricingSettingsContext";
 import { ProductImage, variantCountFor } from "./ProductImage";
 
 function specTags(p: Product, displayKarat?: string): string[] {
@@ -33,7 +34,8 @@ export function ProductCard({
   displayKarat?: string;
 }) {
   const hasSecondPhoto = variantCountFor(product) > 1;
-  const price = (displayKarat ? product.pricesByKarat?.[displayKarat] : undefined) ?? product.price;
+  const livePrices = useChainPrices(product);
+  const price = (displayKarat ? livePrices?.[displayKarat] : undefined) ?? product.price;
 
   return (
     <div className="card" onClick={() => onOpen(product)}>

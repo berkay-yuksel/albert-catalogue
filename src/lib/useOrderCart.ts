@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
+import { usePricingSettings } from "@/lib/PricingSettingsContext";
+import { computeChainPrice } from "@/lib/pricingFormula";
 
 export interface CartLine {
   productId: number;
@@ -62,6 +64,7 @@ export interface OrderCartApi {
 export function useOrderCart(): OrderCartApi {
   const [items, setItems] = useState<Record<string, CartLine>>({});
   const [order, setOrder] = useState<string[]>([]);
+  const { settings } = usePricingSettings();
 
   const itemCount = useMemo(
     () => Object.values(items).reduce((sum, line) => sum + line.qty, 0),
@@ -69,7 +72,11 @@ export function useOrderCart(): OrderCartApi {
   );
 
   function linePrice(product: Product, line: CartLine): number {
-    const base = product.pricesByKarat?.[line.karat] ?? product.price;
+    // Chain prices are always live-computed from the current (possibly
+    // admin-edited) settings, not the static baseline on the product object.
+    const base = product.category === "Chain"
+      ? computeChainPrice(product.weight, line.karat, settings)
+      : product.price;
     const addon = product.category === "Tobacco Pipe" && line.addFilter ? PIPE_FILTER_ADDON_PRICE : 0;
     return base + addon;
   }

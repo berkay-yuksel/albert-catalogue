@@ -3,6 +3,7 @@
 import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
+import { useChainPrices } from "@/lib/PricingSettingsContext";
 import { ProductImage } from "./ProductImage";
 
 export function ProductRow({
@@ -17,7 +18,8 @@ export function ProductRow({
   /** Which karat's price/label to show (Chain only - other categories ignore this). */
   displayKarat?: string;
 }) {
-  const price = (displayKarat ? product.pricesByKarat?.[displayKarat] : undefined) ?? product.price;
+  const livePrices = useChainPrices(product);
+  const price = (displayKarat ? livePrices?.[displayKarat] : undefined) ?? product.price;
   const karatLabel = product.pricesByKarat && displayKarat ? displayKarat : product.karat;
 
   return (

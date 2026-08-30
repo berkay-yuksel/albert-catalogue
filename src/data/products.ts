@@ -11,6 +11,7 @@ import {
 import { FINE_JEWELRY_ITEMS, SUB_CATEGORY_TO_PARENT } from "./fineJewelryData";
 import { CHAIN_ITEMS } from "./chainData";
 import { PIPE_ITEMS } from "./pipeData";
+import { DEFAULT_PRICING_SETTINGS, computeChainPricesByKarat } from "@/lib/pricingFormula";
 
 /* ============================================================
    DEMO PRODUCT GENERATION
@@ -23,20 +24,30 @@ function buildProducts(): Product[] {
 
   // Chain: real catalog data (330 SKUs) - see data/chainData.ts. Name, product
   // code, chain type, workmanship difficulty, image code, thickness, and
-  // weight all come straight from the client sheet - as does the real
-  // wholesale price for every karat (pricesByKarat). `price`/`karat` default
-  // to the 14K figure since that's the catalog's default reference karat;
-  // the buyer picks their actual karat per line item in the order cart.
+  // weight all come straight from the client sheet.
+  //
+  // Pricing: NOT the client sheet's own price columns anymore - live-computed
+  // via the milyem formula (weight × (workmanship + wholesale profit + karat
+  // milyem) / 1000 × gold price/gram), using DEFAULT_PRICING_SETTINGS here as
+  // the baseline (used for the initial server-render and as a fallback). The
+  // actual displayed/cart prices are recomputed on the client from whatever
+  // settings are currently saved via /admin - see useChainPrices() and
+  // useOrderCart's linePrice, which both call the same formula live instead
+  // of reading this static baseline once the page has mounted.
+  // `price`/`karat` default to the 14K figure since that's the catalog's
+  // default reference karat; the buyer picks their actual karat per line
+  // item in the order cart.
   // Color/Clasp/Stone stay "N/A" since there's no real data for those either.
   CHAIN_ITEMS.forEach((item) => {
+    const pricesByKarat = computeChainPricesByKarat(item.weight, DEFAULT_PRICING_SETTINGS);
     products.push({
       id: uid++, category: "Chain", name: item.name,
       chainType: item.chainType, difficulty: item.difficulty, sku: item.productCode, imageCode: item.imageCode,
-      pricesByKarat: item.prices,
+      pricesByKarat,
       karat: "14K", color: "N/A", mfg: "N/A", finish: "N/A", clasp: "N/A", stone: "N/A",
       width: item.thickness, length: 50,
       weight: item.weight, stock: "In Stock",
-      price: item.prices["14K"], imgSlug: "",
+      price: pricesByKarat["14K"], imgSlug: "",
     });
   });
 
