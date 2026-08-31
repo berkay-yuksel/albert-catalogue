@@ -4,12 +4,13 @@ import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 import { useChainPrices } from "@/lib/PricingSettingsContext";
+import { karatLabel as formatKaratLabel } from "@/lib/pricingFormula";
 import { ProductImage, variantCountFor } from "./ProductImage";
 
 function specTags(p: Product, displayKarat?: string): string[] {
   const tags: string[] = [];
   const karatLabel = p.pricesByKarat && displayKarat ? displayKarat : p.karat;
-  if (karatLabel && karatLabel !== "N/A") tags.push(karatLabel);
+  if (karatLabel && karatLabel !== "N/A") tags.push(formatKaratLabel(karatLabel));
   tags.push(p.weight + "g");
   if (p.color && p.color !== "N/A") tags.push(p.color);
   if (p.width) tags.push(p.width + "mm");

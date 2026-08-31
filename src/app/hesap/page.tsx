@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fiyat Paneli | Albert C Jewelry",
+  title: "Fiyat Paneli | Albert C. Wholesale",
   description: "İç kullanım: altın zincir fiyat hesaplama paneli.",
   robots: { index: false, follow: false }, // internal tool, keep out of search engines
 };

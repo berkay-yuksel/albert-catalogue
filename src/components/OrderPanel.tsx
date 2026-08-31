@@ -7,8 +7,7 @@ import { fmtPrice } from "@/data/products";
 import { buildOrderMailto, buildOrderText } from "@/lib/mailto";
 import type { CartLine, OrderCartApi } from "@/lib/useOrderCart";
 import { PIPE_FILTER_ADDON_PRICE } from "@/lib/useOrderCart";
-
-const KARAT_OPTIONS = ["8K (333)", "10K", "14K", "18K", "22K", "24K"];
+import { KARAT_ORDER, karatLabel } from "@/lib/pricingFormula";
 
 export function OrderFab({
   cart,
@@ -109,9 +108,9 @@ function OrderItemRow({
             onChange={(e) => onSetKarat(itemKey, e.target.value)}
             aria-label="Karat"
           >
-            {KARAT_OPTIONS.map((k) => (
+            {KARAT_ORDER.map((k) => (
               <option key={k} value={k}>
-                {k}
+                {karatLabel(k)}
               </option>
             ))}
           </select>

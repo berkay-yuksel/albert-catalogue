@@ -3,7 +3,7 @@ import "./globals.css";
 import { PricingSettingsProvider } from "@/lib/PricingSettingsContext";
 
 export const metadata: Metadata = {
-  title: "Albert C Jewelry | Gold Chain & Jewelry Wholesale Catalog",
+  title: "Albert C. Wholesale Catalog",
   description: "Wholesale catalog for gold chains, fine jewelry and tobacco pipes.",
 };
 

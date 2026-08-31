@@ -4,6 +4,7 @@ import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 import { useChainPrices } from "@/lib/PricingSettingsContext";
+import { karatLabel as formatKaratLabel } from "@/lib/pricingFormula";
 import { ProductImage } from "./ProductImage";
 
 export function ProductRow({
@@ -34,7 +35,7 @@ export function ProductRow({
       </td>
       <td className="row-cat">{product.chainType ?? product.material ?? CAT_LABELS[product.category]}</td>
       <td className="mono">{product.sku ?? "N/A"}</td>
-      <td className="mono">{karatLabel && karatLabel !== "N/A" ? karatLabel : "N/A"}</td>
+      <td className="mono">{karatLabel && karatLabel !== "N/A" ? formatKaratLabel(karatLabel) : "N/A"}</td>
       <td className="mono">{product.width ? product.width + " mm" : "N/A"}</td>
       <td className="mono">{product.length ? product.length + " cm" : "N/A"}</td>
       <td className="mono">{product.weight} g</td>

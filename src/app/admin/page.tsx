@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   KARAT_ORDER,
   KARAT_MILYEM,
+  karatLabel,
   computeChainPricesByKarat,
   type ChainPricingSettings,
 } from "@/lib/pricingFormula";
@@ -128,7 +129,7 @@ export default function AdminPage() {
         <div className="admin-karat-table">
           {KARAT_ORDER.map((k) => (
             <div className="admin-karat-row" key={k}>
-              <span>{k}</span>
+              <span>{karatLabel(k)}</span>
               <span className="mono">{KARAT_MILYEM[k]}</span>
             </div>
           ))}
@@ -145,7 +146,7 @@ export default function AdminPage() {
           <div className="admin-karat-table">
             {KARAT_ORDER.map((k) => (
               <div className="admin-karat-row" key={k}>
-                <span>{k}</span>
+                <span>{karatLabel(k)}</span>
                 <span className="mono">{fmtPrice(previewPrices[k])}</span>
               </div>
             ))}

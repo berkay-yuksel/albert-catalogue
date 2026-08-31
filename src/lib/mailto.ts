@@ -3,7 +3,7 @@ import type { Product } from "@/lib/types";
 import { CAT_LABELS } from "@/data/facets";
 import { fmtPrice } from "@/data/products";
 
-const ORDER_EMAIL = "info@albertexport.com";
+const ORDER_EMAIL = "albert.15cfc@gmail.com";
 
 type LinePriceFn = (product: Product, line: CartLine) => number;
 

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Topbar } from "@/components/Topbar";
 
 export const metadata: Metadata = {
-  title: "Contact | Albert C Jewelry",
-  description: "Get in touch with Albert C Jewelry for wholesale gold chain, fine jewelry, and tobacco pipe orders.",
+  title: "Contact | Albert C. Wholesale",
+  description: "Get in touch with Albert C. Wholesale for wholesale gold chain, fine jewelry, and tobacco pipe orders.",
 };
 
 export default function ContactPage() {
@@ -26,21 +26,13 @@ export default function ContactPage() {
         <div className="contact-grid">
           <div className="contact-card">
             <span className="contact-label">Email</span>
-            <a href="mailto:info@albertexport.com" className="contact-value">
-              info@albertexport.com
+            <a href="mailto:albert.15cfc@gmail.com" className="contact-value">
+              albert.15cfc@gmail.com
             </a>
           </div>
           <div className="contact-card">
-            <span className="contact-label">Phone</span>
-            <span className="contact-value">+1 (555) 010-2024</span>
-          </div>
-          <div className="contact-card">
-            <span className="contact-label">Business Hours</span>
-            <span className="contact-value">Mon–Fri, 9:00 AM – 6:00 PM</span>
-          </div>
-          <div className="contact-card">
             <span className="contact-label">Location</span>
-            <span className="contact-value">Wholesale Jewelry District</span>
+            <span className="contact-value">Shipped from Turkey</span>
           </div>
         </div>
 

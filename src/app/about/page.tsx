@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Topbar } from "@/components/Topbar";
 
 export const metadata: Metadata = {
-  title: "About | Albert C Jewelry",
-  description: "About Albert C Jewelry, a B2B wholesale supplier of gold chains, fine jewelry, and tobacco pipes.",
+  title: "About | Albert C. Wholesale",
+  description: "About Albert C. Wholesale, a B2B wholesale supplier of gold chains, specialty pieces, and tobacco pipes.",
 };
 
 export default function AboutPage() {
@@ -17,21 +17,20 @@ export default function AboutPage() {
         <Link href="/" className="back-link">
           ← Back to Catalog
         </Link>
-        <h1>About Albert C Jewelry</h1>
+        <h1>About Albert C. Wholesale</h1>
         <p className="static-lede">
-          Albert C Jewelry is a B2B wholesale supplier of gold chains, fine jewelry, and tobacco
-          pipes, built around a simple idea: give retailers and distributors a straightforward
-          way to browse a real, working catalog and place orders without friction.
+          Albert C. Wholesale is a B2B wholesale supplier of gold chains, specialty pieces, and
+          tobacco pipes, built around a simple idea: give retailers and distributors a
+          straightforward way to browse a real, working catalog and place orders without friction.
         </p>
 
         <div className="static-section">
           <h2>What We Offer</h2>
           <p>
             Our catalog spans hundreds of gold chain styles, from classic curb and figaro links
-            to hollow and handcrafted designs, alongside a growing Fine Jewelry collection
-            covering bracelets, rings, necklaces, earrings, and specialty pieces available as
-            special orders. We also carry a curated selection of tobacco pipes for retailers
-            looking to diversify their offering.
+            to hollow and handcrafted designs, alongside a growing Special Order collection
+            covering bracelets, rings, necklaces, earrings, and specialty pieces. We also carry a
+            curated selection of tobacco pipes for retailers looking to diversify their offering.
           </p>
         </div>
 
@@ -39,7 +38,7 @@ export default function AboutPage() {
           <h2>How Wholesale Ordering Works</h2>
           <p>
             Browse the catalog, add the items you need to your order list, and send the request
-            directly to our team; no account or checkout process required. For Fine Jewelry
+            directly to our team; no account or checkout process required. For Special Order
             items, pricing is quoted per order based on current gold rates, craftsmanship, and
             quantity; our team will follow up directly once your request comes in.
           </p>

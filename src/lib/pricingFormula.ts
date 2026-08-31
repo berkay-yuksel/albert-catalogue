@@ -40,6 +40,13 @@ export const KARAT_MILYEM: Record<string, number> = {
 
 export const KARAT_ORDER = ["8K (333)", "10K", "14K", "18K", "22K", "24K"];
 
+/** Display label for a karat value - strips the "(333)" purity note, e.g.
+ *  "8K (333)" -> "8K". The full value with "(333)" is still what's used as
+ *  the actual data key (pricesByKarat, KARAT_MILYEM), this is presentation-only. */
+export function karatLabel(karat: string): string {
+  return karat.replace(/\s*\(.*?\)\s*/, "");
+}
+
 /** Ürün Gram × (İşçilik Milyem + Toptan Satış Karı Milyem + Karat Milyem) / 1000 × Gram Altın Fiyatı */
 export function computeChainPrice(weightGrams: number, karat: string, settings: ChainPricingSettings): number {
   const karatMilyem = KARAT_MILYEM[karat] ?? KARAT_MILYEM["14K"];

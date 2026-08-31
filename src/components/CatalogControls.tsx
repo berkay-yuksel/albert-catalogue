@@ -2,8 +2,7 @@
 
 import type { SortValue, ViewMode } from "@/lib/types";
 import type { SortOption } from "@/data/sortOptions";
-
-const KARAT_OPTIONS = ["8K (333)", "10K", "14K", "18K", "22K", "24K"];
+import { KARAT_ORDER, karatLabel } from "@/lib/pricingFormula";
 
 export function CatalogControls({
   search,
@@ -64,9 +63,9 @@ export function CatalogControls({
               onChange={(e) => onKaratChange(e.target.value)}
               aria-label="Karat"
             >
-              {KARAT_OPTIONS.map((k) => (
+              {KARAT_ORDER.map((k) => (
                 <option key={k} value={k}>
-                  {k}
+                  {karatLabel(k)}
                 </option>
               ))}
             </select>

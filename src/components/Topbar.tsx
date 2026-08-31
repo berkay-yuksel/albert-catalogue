@@ -7,8 +7,8 @@ export function Topbar() {
     <div className="topbar">
       <Link href="/" className="brand">
         <div>
-          <h1>Albert C Jewelry</h1>
-          <span>B2B Wholesale Catalog · Chains · Jewelry · Pipes</span>
+          <h1>Albert C. Wholesale</h1>
+          <span>B2B Online Catalog</span>
         </div>
       </Link>
       <nav className="topbar-pages">
