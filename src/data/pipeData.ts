@@ -13,7 +13,7 @@
    Schema notes:
    - "theme" is the BROAD category (Animal, Human, Nature, Skull, Botanical,
      Geometric, Classic, Minimal). "motif" is the SPECIFIC subject depicted
-     (e.g. "", "Bearded Man", "Twin Ram").
+     (e.g. "Elephant", "Bearded Man", "Twin Ram").
    - "surface" is multi-value (a pipe can be both "Carved" and "Textured").
    - "color" is the pipe's own body color (White/Beige/Cream/etc), separate
      from "stemColor" (the mouthpiece color).
@@ -72,7 +72,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     handmade: "Yes", boxIncluded: "Included", price: 330,
   },
   {
-    name: "Carved Leaf Hand-Carved Meerschaum Tobacco Pipe", sku: "ACPIPE04",
+    name: "Carved Leaf Tobacco Pipe", sku: "ACPIPE04",
     image: "pipe4a.png", zoomImage: "pipe4b.png",
     material: "Meerschaum", shape: "Bent", carvingStyle: "Botanical", theme: "Nature", motif: "Leaf",
     color: "Brown", surface: ["Carved"], detailLevel: "High",
@@ -112,9 +112,9 @@ export const PIPE_ITEMS: PipeItem[] = [
     handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
-    name: "Figural Meerschaum Pipe", sku: "ACPIPE09",
+    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE09",
     image: "pipe9a.png", zoomImage: "pipe9b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
     color: "White", surface: ["Carved", "Textured", "Dotted"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
     handmade: "Yes", boxIncluded: "Included", price: 230,
@@ -168,9 +168,9 @@ export const PIPE_ITEMS: PipeItem[] = [
     handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
-    name: " Figural Meerschaum Pipe", sku: "ACPIPE17",
+    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE17",
     image: "pipe17a.png", zoomImage: "pipe17b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
     color: "Beige", surface: ["Carved", "Textured"], detailLevel: "High",
     stemColor: "Amber Orange", mouthpieceShape: "Slightly Curved", finish: "Carved",
     handmade: "Yes", boxIncluded: "Included", price: 330,
@@ -320,9 +320,9 @@ export const PIPE_ITEMS: PipeItem[] = [
     handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
-    name: " Figural Meerschaum Pipe", sku: "ACPIPE37",
+    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE37",
     image: "pipe37a.png", zoomImage: "pipe37b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
     color: "White", surface: ["Carved", "Textured", "Dotted"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
     handmade: "Yes", boxIncluded: "Included", price: 230,
@@ -342,7 +342,32 @@ export const PIPE_ITEMS: PipeItem[] = [
     color: "White", surface: ["Smooth", "Relief"], detailLevel: "Medium",
     stemColor: "Amber Orange", mouthpieceShape: "Curved", finish: "Textured",
     handmade: "Yes", boxIncluded: "Included", price: 180,
-  },];
+  },
+  {
+    // Made-to-order - most specs vary by request, so descriptive fields use
+    // "Custom" rather than a fixed value. Priced on request, like Fine
+    // Jewelry (Special Order) - see OrderPanel's "Contact for Pricing"
+    // handling for $0 items.
+    name: "Custom Pipe", sku: "ACPIPE40",
+    image: "pipe40a.png", zoomImage: "pipe40b.png",
+    material: "Custom", shape: "Custom", carvingStyle: "Custom", theme: "Custom", motif: "Custom",
+    color: "Custom", surface: ["Custom"], detailLevel: "Custom",
+    stemColor: "Custom", mouthpieceShape: "Custom", finish: "Custom",
+    handmade: "Yes", boxIncluded: "Not Included", price: 0,
+  },
+  {
+    // Standalone accessory (not a smoking pipe itself) - pipe-specific
+    // fields like shape/theme/motif/surface genuinely don't apply, so they're
+    // marked "N/A" consistent with how the rest of the app handles
+    // not-applicable fields (e.g. Chain's color/clasp/stone).
+    name: "Pipe Storage Box", sku: "ACBOX1",
+    image: "ACBOX1a.png", zoomImage: "ACBOX1b.png",
+    material: "Custom", shape: "N/A", carvingStyle: "N/A", theme: "N/A", motif: "N/A",
+    color: "N/A", surface: ["N/A"], detailLevel: "N/A",
+    stemColor: "N/A", mouthpieceShape: "N/A", finish: "N/A",
+    handmade: "N/A", boxIncluded: "N/A", price: 10,
+  },
+];
 
 /* ============================================================
    FACET VALUE LISTS
