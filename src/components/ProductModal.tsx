@@ -42,7 +42,7 @@ export function ProductModal({
   const specs = DETAIL_FIELDS.filter((f) => {
     const v = product[f.key];
     if (Array.isArray(v)) return v.length > 0;
-    return v !== undefined && v !== "N/A" && v !== 0 && v !== "" && v !== false;
+    return v !== undefined && v !== "N/A" && v !== 0 && v !== "";
   });
 
   function step(dir: number) {

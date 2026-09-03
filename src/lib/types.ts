@@ -70,9 +70,20 @@ export interface Product {
   material?: string;
   pipeShape?: string;
   carvingStyle?: string;
+  /** Broad category (Animal, Human, Nature, Skull, Botanical, Geometric, Classic, Minimal). */
   theme?: string;
+  /** Specific subject depicted, e.g. "Elephant", "Bearded Man" - more granular than `theme`. */
+  motif?: string;
+  /** The pipe's own body color (White/Beige/Cream/etc) - distinct from `stemColor` (the mouthpiece). */
+  pipeColor?: string;
+  /** Multi-value surface texture descriptors, e.g. ["Carved", "Textured"]. */
+  surface?: string[];
+  /** Minimal / Medium / High - how intricate the carving is. */
+  detailLevel?: string;
   stemColor?: string;
-  handmade?: boolean;
+  mouthpieceShape?: string;
+  /** "Yes" or "No" - kept as a string (not boolean) so it plugs into the generic checkbox facet system. */
+  handmade?: string;
   /** "Included" or "Not Included" - kept as a string (not boolean) so it plugs into the generic checkbox facet system like other filters. */
   boxIncluded?: string;
   /** Exact photo filenames from the client data, served from /pipeimages/. */

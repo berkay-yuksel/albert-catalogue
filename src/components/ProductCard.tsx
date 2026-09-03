@@ -17,6 +17,8 @@ function specTags(p: Product, displayKarat?: string): string[] {
   if (p.length) tags.push(p.length + "cm");
   if (p.size) tags.push(p.size);
   if (p.material) tags.push(p.material);
+  if (p.motif) tags.push(p.motif);
+  if (p.pipeColor) tags.push(p.pipeColor);
   if (p.finish && p.finish !== "N/A") tags.push(p.finish);
   if (p.stemColor) tags.push(p.stemColor);
   return tags.slice(0, 4);
@@ -62,16 +64,18 @@ export function ProductCard({
       <div className="card-body">
         <div className="card-cat">{product.chainType ?? product.material ?? CAT_LABELS[product.category]}</div>
         <div className="card-name">{product.name}</div>
-        <div className="card-specs">
-          {specTags(product, displayKarat).map((t) => (
-            <span className="spec-tag" key={t}>
-              {t}
-            </span>
-          ))}
-        </div>
+        {product.category !== "Tobacco Pipe" && (
+          <div className="card-specs">
+            {specTags(product, displayKarat).map((t) => (
+              <span className="spec-tag" key={t}>
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="card-foot">
           <span className="card-price">{fmtPrice(price)}</span>
-          <span className="weight-val">{product.weight}g</span>
+          {product.category !== "Tobacco Pipe" && <span className="weight-val">{product.weight}g</span>}
         </div>
       </div>
     </div>

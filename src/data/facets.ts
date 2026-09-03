@@ -5,7 +5,7 @@ import {
   NECKLACE_MFG,
 } from "./options";
 import { CHAIN_TYPES } from "./chainData";
-import { PIPE_MATERIALS, PIPE_SHAPES, PIPE_CARVING_STYLES, PIPE_THEMES, PIPE_STEM_COLORS, PIPE_FINISHES, PIPE_BOX_OPTIONS } from "./pipeData";
+import { PIPE_MATERIALS, PIPE_SHAPES, PIPE_THEMES, PIPE_STEM_COLORS, PIPE_HANDMADE_OPTIONS, PIPE_BOX_OPTIONS } from "./pipeData";
 
 /** Categories shown in the navigation tabs. Bracelet/Ring/Necklace still exist
  *  as data (used by CATEGORY_FACETS etc.) but are intentionally left out of
@@ -84,10 +84,9 @@ export const CATEGORY_FACETS: Record<Category, FacetConfig[]> = {
   "Tobacco Pipe": [
     { key: "material", type: "checkbox", label: "Material", values: [...PIPE_MATERIALS] },
     { key: "pipeShape", type: "checkbox", label: "Shape", values: [...PIPE_SHAPES] },
-    { key: "carvingStyle", type: "checkbox", label: "Carving Style", values: [...PIPE_CARVING_STYLES] },
     { key: "theme", type: "checkbox", label: "Theme", values: [...PIPE_THEMES] },
     { key: "stemColor", type: "checkbox", label: "Stem Color", values: [...PIPE_STEM_COLORS] },
-    { key: "finish", type: "checkbox", label: "Finish", values: [...PIPE_FINISHES] },
-    { key: "boxIncluded", type: "checkbox", label: "Box", values: [...PIPE_BOX_OPTIONS] },
+    { key: "handmade", type: "checkbox", label: "Handmade", values: [...PIPE_HANDMADE_OPTIONS] },
+    { key: "boxIncluded", type: "checkbox", label: "Box Included", values: [...PIPE_BOX_OPTIONS] },
   ],
 };

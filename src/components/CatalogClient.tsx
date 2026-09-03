@@ -14,6 +14,7 @@ import { Sidebar } from "./Sidebar";
 import { ProductCard } from "./ProductCard";
 import { ProductRow } from "./ProductRow";
 import { FineJewelryTable } from "./FineJewelryTable";
+import { PipeTable } from "./PipeTable";
 import { ActiveChips } from "./ActiveChips";
 import { EmptyState } from "./EmptyState";
 import { ProductModal } from "./ProductModal";
@@ -44,6 +45,7 @@ export function CatalogClient({ products }: { products: Product[] }) {
 
   const isFineJewelry = activeCategory === FINE_JEWELRY_CATEGORY;
   const isChain = activeCategory === "Chain";
+  const isPipe = activeCategory === "Tobacco Pipe";
   // Fine Jewelry only ever shows as a list, regardless of the last-selected view.
   const effectiveView: ViewMode = isFineJewelry ? "list" : view;
   const sortOptions = useMemo(() => sortOptionsForCategory(activeCategory), [activeCategory]);
@@ -173,6 +175,14 @@ export function CatalogClient({ products }: { products: Product[] }) {
                 <ProductCard product={p} key={p.id} onOpen={setSelectedProduct} onAdd={handleAdd} displayKarat={selectedKarat} />
               ))}
             </div>
+          ) : isPipe ? (
+            <PipeTable
+              products={sorted}
+              onOpen={setSelectedProduct}
+              onAdd={handleAdd}
+              onHeaderClick={handleHeaderClick}
+              sortArrow={sortArrow}
+            />
           ) : (
             <div className="list-view active">
               <div className="table-wrap">

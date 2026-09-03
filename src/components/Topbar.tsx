@@ -8,7 +8,7 @@ export function Topbar() {
       <Link href="/" className="brand">
         <div>
           <h1>Albert C. Wholesale</h1>
-          <span>B2B Online Catalog</span>
+          <span>Chains · Jewelry · Pipes</span>
         </div>
       </Link>
       <nav className="topbar-pages">
