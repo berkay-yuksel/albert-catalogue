@@ -13,7 +13,7 @@
    Schema notes:
    - "theme" is the BROAD category (Animal, Human, Nature, Skull, Botanical,
      Geometric, Classic, Minimal). "motif" is the SPECIFIC subject depicted
-     (e.g. "Elephant", "Bearded Man", "Twin Ram").
+     (e.g. "", "Bearded Man", "Twin Ram").
    - "surface" is multi-value (a pipe can be both "Carved" and "Textured").
    - "color" is the pipe's own body color (White/Beige/Cream/etc), separate
      from "stemColor" (the mouthpiece color).
@@ -38,6 +38,8 @@ export interface PipeItem {
   mouthpieceShape: string;
   finish: string;
   handmade: string;
+  /** Fixed wholesale price in USD, set directly per item (not weight-derived). */
+  price: number;
   /** "Included" or "Not Included". No per-item data was given for this, so
    *  every current item defaults to "Included" (standard for boxed
    *  meerschaum pipes) - update per-item if any should actually differ. */
@@ -51,7 +53,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Bent", carvingStyle: "Lattice", theme: "Geometric", motif: "Teardrop Pattern",
     color: "White", surface: ["Lattice"], detailLevel: "High",
     stemColor: "Amber Tortoise", mouthpieceShape: "Curved", finish: "Lattice",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Twin Ram Hand-Carved Meerschaum Pipe", sku: "ACPIPE02",
@@ -59,7 +61,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Twin Ram",
     color: "White", surface: ["Carved"], detailLevel: "High",
     stemColor: "Amber Tortoise", mouthpieceShape: "Curved", finish: "Hand-Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 330,
   },
   {
     name: "Lady in Rose Hat Hand-Carved Meerschaum Pipe", sku: "ACPIPE03",
@@ -67,15 +69,15 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Lady in Rose Hat",
     color: "White", surface: ["Carved"], detailLevel: "High",
     stemColor: "Amber Tortoise", mouthpieceShape: "Curved", finish: "Hand-Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 330,
   },
   {
-    name: "Carved Leaf Wooden Tobacco Pipe", sku: "ACPIPE04",
+    name: "Carved Leaf Hand-Carved Meerschaum Tobacco Pipe", sku: "ACPIPE04",
     image: "pipe4a.png", zoomImage: "pipe4b.png",
-    material: "Wood", shape: "Bent", carvingStyle: "Botanical", theme: "Nature", motif: "Leaf",
+    material: "Meerschaum", shape: "Bent", carvingStyle: "Botanical", theme: "Nature", motif: "Leaf",
     color: "Brown", surface: ["Carved"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Draped Lady Hand-Carved Meerschaum Pipe", sku: "ACPIPE05",
@@ -83,7 +85,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Draped Lady",
     color: "White", surface: ["Carved"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Hand-Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
     name: "Lattice Panel Hand-Carved Meerschaum Pipe", sku: "ACPIPE06",
@@ -91,7 +93,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Panel", carvingStyle: "Lattice", theme: "Geometric", motif: "Abstract Lattice",
     color: "White", surface: ["Lattice"], detailLevel: "High",
     stemColor: "Dark Tortoise", mouthpieceShape: "Curved", finish: "Lattice",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Skull Hand-Carved Meerschaum Pipe", sku: "ACPIPE07",
@@ -99,7 +101,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Skull", motif: "Skull",
     color: "White", surface: ["Carved"], detailLevel: "High",
     stemColor: "Dark Tortoise", mouthpieceShape: "Curved", finish: "Hand-Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Floral Scroll Hand-Carved Meerschaum Pipe", sku: "ACPIPE08",
@@ -107,24 +109,23 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Bent", carvingStyle: "Ornamental", theme: "Botanical", motif: "Floral Scroll",
     color: "White", surface: ["Carved"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Hand-Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
-    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE09",
+    name: "Figural Meerschaum Pipe", sku: "ACPIPE09",
     image: "pipe9a.png", zoomImage: "pipe9b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
     color: "White", surface: ["Carved", "Textured", "Dotted"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
-
   {
     name: "Leaf Feather Ornamental Meerschaum Pipe", sku: "ACPIPE11",
     image: "pipe11a.png", zoomImage: "pipe11b.png",
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Ornamental", theme: "Nature", motif: "Leaf Feather",
     color: "White", surface: ["Smooth", "Relief"], detailLevel: "Medium",
     stemColor: "Amber Orange", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
     name: "Fantasy Skull Figural Meerschaum Pipe", sku: "ACPIPE12",
@@ -132,7 +133,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Skull", motif: "Fantasy Skull",
     color: "Beige", surface: ["Carved", "Granular", "Textured"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 330,
   },
   {
     name: "Skull Figural Meerschaum Pipe", sku: "ACPIPE13",
@@ -140,7 +141,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Skull", motif: "Skull",
     color: "White", surface: ["Carved", "Relief"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Bearded Man Figural Meerschaum Pipe", sku: "ACPIPE14",
@@ -148,7 +149,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Bearded Man",
     color: "White", surface: ["Carved", "Relief"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Lion Figural Meerschaum Pipe", sku: "ACPIPE15",
@@ -156,7 +157,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Lion",
     color: "Beige", surface: ["Carved", "Fur Texture"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Buffalo Figural Meerschaum Pipe", sku: "ACPIPE16",
@@ -164,24 +165,23 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Buffalo",
     color: "Cream", surface: ["Carved", "Fur Texture"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
-    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE17",
+    name: " Figural Meerschaum Pipe", sku: "ACPIPE17",
     image: "pipe17a.png", zoomImage: "pipe17b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
     color: "Beige", surface: ["Carved", "Textured"], detailLevel: "High",
     stemColor: "Amber Orange", mouthpieceShape: "Slightly Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 330,
   },
-
   {
     name: "Bearded Man Figural Meerschaum Pipe", sku: "ACPIPE19",
     image: "pipe19a.png", zoomImage: "pipe19b.png",
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Bearded Man",
     color: "White", surface: ["Carved", "Hair Texture", "Relief"], detailLevel: "High",
     stemColor: "Dark Amber", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Stylized Skull Figural Meerschaum Pipe", sku: "ACPIPE20",
@@ -189,7 +189,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Skull", motif: "Stylized Skull",
     color: "White", surface: ["Smooth", "Carved"], detailLevel: "Medium",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Flower Ornamental Meerschaum Pipe", sku: "ACPIPE21",
@@ -197,7 +197,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Ornamental", theme: "Botanical", motif: "Flower",
     color: "White", surface: ["Carved", "Relief", "Floral"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
     name: "Leaf Feather Ornamental Meerschaum Pipe", sku: "ACPIPE22",
@@ -205,7 +205,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Ornamental", theme: "Nature", motif: "Leaf Feather",
     color: "White", surface: ["Smooth", "Relief"], detailLevel: "Medium",
     stemColor: "Amber Orange", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 280,
   },
   {
     name: "Plain Geometric Meerschaum Pipe", sku: "ACPIPE23",
@@ -213,7 +213,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Angular", carvingStyle: "Geometric", theme: "Minimal", motif: "Plain",
     color: "White", surface: ["Smooth"], detailLevel: "Minimal",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Plain Classic Meerschaum Pipe", sku: "ACPIPE24",
@@ -221,7 +221,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Cylindrical", carvingStyle: "Classic", theme: "Classic", motif: "Plain",
     color: "White", surface: ["Pebbled", "Textured"], detailLevel: "Medium",
     stemColor: "Black Amber", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Crater Textured Meerschaum Pipe", sku: "ACPIPE25",
@@ -229,7 +229,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Oval", carvingStyle: "Textured", theme: "Geometric", motif: "Crater",
     color: "White", surface: ["Cratered", "Dimpled", "Textured"], detailLevel: "High",
     stemColor: "Dark Amber", mouthpieceShape: "Slightly Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Dots Textured Meerschaum Pipe", sku: "ACPIPE26",
@@ -237,7 +237,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Barrel", carvingStyle: "Textured", theme: "Geometric", motif: "Dots",
     color: "White", surface: ["Dotted", "Dimpled"], detailLevel: "Medium",
     stemColor: "Dark Amber", mouthpieceShape: "Slightly Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Rings Textured Meerschaum Pipe", sku: "ACPIPE27",
@@ -245,7 +245,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Cylindrical", carvingStyle: "Textured", theme: "Geometric", motif: "Rings",
     color: "Beige", surface: ["Ring Pattern", "Dimpled", "Carved"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Plain Classic Meerschaum Pipe", sku: "ACPIPE28",
@@ -253,7 +253,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Cylindrical", carvingStyle: "Classic", theme: "Minimal", motif: "Plain",
     color: "White", surface: ["Pebbled", "Textured"], detailLevel: "Minimal",
     stemColor: "Amber Orange", mouthpieceShape: "Straight", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Plain Classic Meerschaum Pipe", sku: "ACPIPE29",
@@ -261,7 +261,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Classic", theme: "Minimal", motif: "Plain",
     color: "White", surface: ["Smooth"], detailLevel: "Minimal",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Grid Textured Meerschaum Pipe", sku: "ACPIPE30",
@@ -269,7 +269,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Cylindrical", carvingStyle: "Textured", theme: "Geometric", motif: "Grid",
     color: "White", surface: ["Grid Texture", "Crosshatch", "Textured"], detailLevel: "Medium",
     stemColor: "Amber Black", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Circles Modern Meerschaum Pipe", sku: "ACPIPE31",
@@ -277,7 +277,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Conical", carvingStyle: "Modern", theme: "Geometric", motif: "Circles",
     color: "White", surface: ["Dimpled", "Textured"], detailLevel: "Medium",
     stemColor: "Amber Black", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Oval Rings Textured Meerschaum Pipe", sku: "ACPIPE32",
@@ -285,7 +285,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Textured", theme: "Geometric", motif: "Oval Rings",
     color: "White", surface: ["Cratered", "Ring Pattern", "Dimpled"], detailLevel: "High",
     stemColor: "Amber Orange", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Human Face Figural Meerschaum Pipe", sku: "ACPIPE33",
@@ -293,7 +293,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Human Face",
     color: "White", surface: ["Carved", "Relief", "Hair Texture"], detailLevel: "High",
     stemColor: "Black", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Dots Textured Meerschaum Pipe", sku: "ACPIPE34",
@@ -301,7 +301,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Barrel", carvingStyle: "Textured", theme: "Geometric", motif: "Dots",
     color: "White", surface: ["Dotted", "Dimpled"], detailLevel: "Medium",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Fantasy Skull Figural Meerschaum Pipe", sku: "ACPIPE35",
@@ -309,7 +309,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Skull", motif: "Fantasy Skull",
     color: "Beige", surface: ["Carved", "Granular", "Textured"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Carved",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Human Face Figural Meerschaum Pipe", sku: "ACPIPE36",
@@ -317,15 +317,15 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Human Face",
     color: "White", surface: ["Carved", "Relief", "Hair Texture"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
-    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE37",
+    name: " Figural Meerschaum Pipe", sku: "ACPIPE37",
     image: "pipe37a.png", zoomImage: "pipe37b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
+    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "",
     color: "White", surface: ["Carved", "Textured", "Dotted"], detailLevel: "High",
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 230,
   },
   {
     name: "Dots Minimal Meerschaum Pipe", sku: "ACPIPE38",
@@ -333,7 +333,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Cylindrical", carvingStyle: "Minimal", theme: "Geometric", motif: "Dots",
     color: "White", surface: ["Dotted", "Dimpled"], detailLevel: "Minimal",
     stemColor: "Amber Brown", mouthpieceShape: "Straight", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },
   {
     name: "Leaf Feather Ornamental Meerschaum Pipe", sku: "ACPIPE39",
@@ -341,7 +341,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     material: "Meerschaum", shape: "Rounded", carvingStyle: "Ornamental", theme: "Nature", motif: "Leaf Feather",
     color: "White", surface: ["Smooth", "Relief"], detailLevel: "Medium",
     stemColor: "Amber Orange", mouthpieceShape: "Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
+    handmade: "Yes", boxIncluded: "Included", price: 180,
   },];
 
 /* ============================================================

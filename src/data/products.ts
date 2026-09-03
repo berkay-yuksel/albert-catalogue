@@ -115,7 +115,7 @@ function buildProducts(): Product[] {
       finish: item.finish, handmade: item.handmade, boxIncluded: item.boxIncluded,
       karat: "N/A", color: "N/A", mfg: "N/A", clasp: "N/A", stone: "N/A",
       width: 0, length: 0, weight: +(30 + ((i * 11) % 40)).toFixed(0), stock: "In Stock",
-      price: 0, imgSlug: "",
+      price: item.price, imgSlug: "",
     });
   });
 
@@ -155,37 +155,13 @@ const GOLD_PRICE_PER_GRAM = 85; // USD - used only for the hidden demo categorie
 
 /* ============================================================
    TOBACCO PIPE PRICING
-   Tiered by workmanship complexity (detailLevel), with a small cyclic
-   variation within each tier so prices aren't all identical:
-   - Minimal detail: ~$180-225 (lowest labor)
-   - Medium detail:  ~$260-345
-   - High detail:    ~$348-428 (most intricate hand-carving)
-   Overall: min $180, average ~$350 across all 39 pipes.
-
-   Precomputed once from PIPE_ITEMS (in its fixed order) into a sku -> price
-   map, rather than a running counter tied to call order - keeps this
-   deterministic regardless of how/when computePrice() gets invoked.
+   Fixed wholesale price per pipe, set directly by the client (not derived
+   from weight/detail level) - see PIPE_ITEMS[].price in data/pipeData.ts.
    ============================================================ */
-const PIPE_PRICE_CYCLES: Record<string, number[]> = {
-  Minimal: [180, 195, 210, 225],
-  Medium: [260, 280, 300, 320, 340, 260, 280, 300, 320],
-  High: [348, 368, 388, 408, 428, 368, 388, 408, 428, 348, 368, 388, 408, 428, 368, 388, 408, 428, 348, 368, 388, 408, 428, 368, 388, 408],
-};
-const PIPE_PRICE_BY_SKU: Record<string, number> = (() => {
-  const counters: Record<string, number> = { Minimal: 0, Medium: 0, High: 0 };
-  const map: Record<string, number> = {};
-  for (const item of PIPE_ITEMS) {
-    const cycle = PIPE_PRICE_CYCLES[item.detailLevel] ?? PIPE_PRICE_CYCLES.Medium;
-    const i = counters[item.detailLevel] ?? 0;
-    map[item.sku] = cycle[i % cycle.length];
-    counters[item.detailLevel] = i + 1;
-  }
-  return map;
-})();
 
 function computePrice(p: Product): number {
   if (p.category === "Tobacco Pipe") {
-    return PIPE_PRICE_BY_SKU[p.sku ?? ""] ?? 350;
+    return p.price;
   }
   // Fine Jewelry (8K Gold Collection) is priced on request, not listed - see OrderPanel's
   // "Contact for Pricing" handling for carts made up entirely of these items.

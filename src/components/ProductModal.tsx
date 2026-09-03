@@ -40,6 +40,7 @@ export function ProductModal({
   const gallery = variantCountFor(product) === 2 ? SKU_GALLERY : FULL_GALLERY;
 
   const specs = DETAIL_FIELDS.filter((f) => {
+    if (product.category === "Tobacco Pipe" && f.key === "weight") return false;
     const v = product[f.key];
     if (Array.isArray(v)) return v.length > 0;
     return v !== undefined && v !== "N/A" && v !== 0 && v !== "";
