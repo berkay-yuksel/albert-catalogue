@@ -117,14 +117,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Textured",
     handmade: "Yes", boxIncluded: "Included",
   },
-  {
-    name: "Bearded Man Figural Meerschaum Pipe", sku: "ACPIPE10",
-    image: "pipe10a.png", zoomImage: "pipe10b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Human", motif: "Bearded Man",
-    color: "White", surface: ["Carved", "Relief"], detailLevel: "High",
-    stemColor: "Amber Brown", mouthpieceShape: "Curved", finish: "Smooth",
-    handmade: "Yes", boxIncluded: "Included",
-  },
+
   {
     name: "Leaf Feather Ornamental Meerschaum Pipe", sku: "ACPIPE11",
     image: "pipe11a.png", zoomImage: "pipe11b.png",
@@ -181,14 +174,7 @@ export const PIPE_ITEMS: PipeItem[] = [
     stemColor: "Amber Orange", mouthpieceShape: "Slightly Curved", finish: "Carved",
     handmade: "Yes", boxIncluded: "Included",
   },
-  {
-    name: "Elephant Figural Meerschaum Pipe", sku: "ACPIPE18",
-    image: "pipe18a.png", zoomImage: "pipe18b.png",
-    material: "Meerschaum", shape: "Figural", carvingStyle: "Figural", theme: "Animal", motif: "Elephant",
-    color: "White", surface: ["Carved", "Textured", "Dotted"], detailLevel: "High",
-    stemColor: "Amber Brown", mouthpieceShape: "Slightly Curved", finish: "Textured",
-    handmade: "Yes", boxIncluded: "Included",
-  },
+
   {
     name: "Bearded Man Figural Meerschaum Pipe", sku: "ACPIPE19",
     image: "pipe19a.png", zoomImage: "pipe19b.png",
